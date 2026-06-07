@@ -59,6 +59,7 @@ model.compile(
 )
 
 # Train model
+st.write("Training model... please wait")
 model.fit(
     padded,
     np.array(labels),
@@ -80,6 +81,65 @@ user_input = st.text_input(
 
 if st.button("Predict"):
 
+    # Language Detection
+    text_lower = user_input.lower()
+
+    hindi_words = [
+        "kya", "hai", "fir",
+        "waah", "wah", "acha",
+        "kyu", "nahi"
+    ]
+
+    marathi_words = [
+        "kay", "kaay", "kasa",
+        "aahe", "ahe",
+        "khup", "mast",
+        "punha", "bara",
+        "chan", "nahi",
+        "zala", "zhali",
+        "mhanje", "mala",
+        "tula", "apla",
+        "marathi"
+    ]
+
+    hindi_count = sum(
+        word in text_lower
+        for word in hindi_words
+    )
+
+    marathi_count = sum(
+        word in text_lower
+        for word in marathi_words
+    )
+
+    if marathi_count > hindi_count and marathi_count > 0:
+        language = "Marathi"
+
+    elif hindi_count > 0:
+        language = "Hindi / Hinglish"
+
+    else:
+        language = "English"
+
+
+    # Sentiment
+    from textblob import TextBlob
+
+    polarity = TextBlob(
+        user_input
+    ).sentiment.polarity
+
+    if polarity > 0:
+        sentiment = "😊 Positive"
+
+    elif polarity < 0:
+        sentiment = "😔 Negative"
+
+    else:
+        sentiment = "😐 Neutral"
+
+
+    # Sarcasm Prediction
     sequence = tokenizer.texts_to_sequences(
         [user_input]
     )
@@ -93,7 +153,30 @@ if st.button("Predict"):
         padded_text
     )
 
+    confidence = float(
+        prediction[0][0]
+    ) * 100
+
+
+    # Show Results
+    st.subheader("Prediction Result")
+
+    st.write(
+        f"🌍 Language: {language}"
+    )
+
+    st.write(
+        f"💭 Sentiment: {sentiment}"
+    )
+
     if prediction[0][0] > 0.5:
         st.error("😏 Sarcastic")
+        st.write(
+            f"🎯 Confidence: {confidence:.2f}%"
+        )
+
     else:
         st.success("🙂 Not Sarcastic")
+        st.write(
+            f"🎯 Confidence: {100-confidence:.2f}%"
+        )
