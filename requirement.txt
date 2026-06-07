@@ -1,9 +1,9 @@
-streamlit==1.35.0
+streamlit
 tensorflow-cpu==2.15.0
-numpy==1.26.4
-pandas==2.2.2
-scikit-learn==1.5.1
-nltk==3.8.1
-textblob==0.18.0.post0
-langdetect==1.0.9
+numpy
+pandas
+scikit-learn
+nltk
+textblob
+langdetect
 protobuf==4.25.3
