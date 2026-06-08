@@ -7,3 +7,5 @@ nltk
 textblob
 langdetect
 protobuf==4.25.3
+seaborn
+matplotlib
