@@ -1,5 +1,5 @@
 streamlit
-tensorflow-cpu==2.15.0
+tensorflow==2.15.0
 numpy
 pandas
 scikit-learn
@@ -7,5 +7,5 @@ nltk
 textblob
 langdetect
 protobuf==4.25.3
-seaborn
 matplotlib
+seaborn
