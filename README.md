@@ -172,7 +172,8 @@ python -m streamlit run app.py
 
 ---
 
-## 📸 Sample Output("Screenshot 2026-06-15 113307.png")
+## 📸 Sample Output
+![Output](output.png)
 
 ### Input:
 
