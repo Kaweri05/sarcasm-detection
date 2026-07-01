@@ -1,6 +1,13 @@
-Flask
-tensorflow==2.15.0
+flask==3.1.3
+tensorflow-cpu==2.15.0
+numpy==1.26.4
 pandas
-numpy
-plotly   # only needed server‑side for optional saving; front‑end uses CDN
 textblob
+langdetect
+protobuf==4.25.3
+nltk
+gunicorn
+scikit-learn
+matplotlib
+seaborn
+werkzeug>=3.1.0
