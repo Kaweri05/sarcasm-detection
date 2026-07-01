@@ -3,8 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Sarcasm Sense — Dashboard</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+    <meta name="theme-color" content="#FF6A3D">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Sarcasm Sense</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -13,50 +16,75 @@
 
 <body>
 
-    <!-- Profile Modal -->
+    <!-- ═══ PROFILE MODAL ═══ -->
     <div class="modal-overlay" id="profileModal">
         <div class="modal">
             <span class="modal-close" onclick="closeProfile()">✕</span>
             <div class="profile-avatar" id="profileInitials">KH</div>
-            <div style="text-align:center;font-size:11px;color:var(--muted);margin-bottom:4px">PROFILE</div>
+            <div style="text-align:center;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em">YOUR
+                PROFILE</div>
             <div class="profile-field"><label>Full Name</label><input id="pName" value="Kaweri Harinkhede"></div>
             <div class="profile-field"><label>Role</label><input id="pRole" value="Computer Engineering Student"></div>
-            <div class="profile-field"><label>GitHub</label><input id="pGithub" value="Kaweri05"></div>
+            <div class="profile-field"><label>GitHub Handle</label><input id="pGithub" value="Kaweri05"></div>
             <div class="profile-field"><label>Email</label><input id="pEmail" value="kaweri@example.com"></div>
-            <div style="margin-top:16px;font-size:12px;font-weight:700;color:var(--muted)">BADGES</div>
+            <div class="profile-field"><label>UI Language</label>
+                <select id="pUILang" onchange="applyUILanguage()">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="ja">日本語</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+            <div style="margin-top:14px;font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.05em">BADGES
+            </div>
             <div class="badge-row">
-                <span class="badge">🧠 NLP Builder</span>
-                <span class="badge">🌍 Multilingual</span>
-                <span class="badge">🚀 Deployed</span>
-                <span class="badge">📊 Analyst</span>
+                <span class="badge">🧠 NLP Builder</span><span class="badge">🌍 Multilingual</span>
+                <span class="badge">🚀 Deployed</span><span class="badge">📊 Analyst</span>
             </div>
             <button class="profile-save" onclick="saveProfile()">Save Profile</button>
         </div>
     </div>
 
+    <!-- ═══ SIDEBAR OVERLAY ═══ -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- ═══ APP SHELL ═══ -->
     <div class="app-shell">
+
         <!-- SIDEBAR -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="brand">
                 <div class="brand-mark">😏</div>
                 <div class="brand-name">Sarcasm Sense</div>
             </div>
-            <div class="nav-label">Workspace</div>
+            <div class="nav-label" data-i18n="nav_workspace">Workspace</div>
             <ul class="nav-list">
-                <li><a class="active" onclick="nav('dashboard')"><span class="ic">📊</span> Dashboard</a></li>
-                <li><a onclick="nav('language')"><span class="ic">🌍</span> Language Mix</a></li>
-                <li><a onclick="nav('sentiment')"><span class="ic">💭</span> Sentiment</a></li>
-                <li><a onclick="nav('history')"><span class="ic">🕓</span> History</a></li>
-                <li><a onclick="nav('alerts')"><span class="ic">🚨</span> Alerts <span id="alertBadge"
-                            style="display:none;background:var(--bad);color:#fff;border-radius:999px;padding:1px 7px;font-size:10px;margin-left:auto">0</span></a>
-                </li>
+                <li><a class="active" onclick="nav('dashboard')"><span class="ic">📊</span> <span
+                            data-i18n="nav_dashboard">Dashboard</span></a></li>
+                <li><a onclick="nav('translate')"><span class="ic">🌐</span> <span
+                            data-i18n="nav_translate">Translator</span></a></li>
+                <li><a onclick="nav('language')"><span class="ic">🗺️</span> <span data-i18n="nav_language">Language
+                            Mix</span></a></li>
+                <li><a onclick="nav('sentiment')"><span class="ic">💭</span> <span
+                            data-i18n="nav_sentiment">Sentiment</span></a></li>
+                <li><a onclick="nav('history')"><span class="ic">🕓</span> <span
+                            data-i18n="nav_history">History</span></a></li>
+                <li><a onclick="nav('alerts')"><span class="ic">🚨</span> <span data-i18n="nav_alerts">Alerts</span>
+                        <span class="nav-badge" id="alertBadge" style="display:none">0</span></a></li>
             </ul>
-            <div class="nav-label">System</div>
+            <div class="nav-label" data-i18n="nav_system">System</div>
             <ul class="nav-list">
-                <li><a onclick="nav('model')"><span class="ic">🧠</span> Model Info</a></li>
-                <li><a onclick="nav('help')"><span class="ic">❓</span> Help</a></li>
-                <li><a onclick="nav('privacy')"><span class="ic">🔒</span> Privacy</a></li>
-                <li><a onclick="nav('settings')"><span class="ic">⚙️</span> Settings</a></li>
+                <li><a onclick="nav('model')"><span class="ic">🧠</span> <span data-i18n="nav_model">Model
+                            Info</span></a></li>
+                <li><a onclick="nav('help')"><span class="ic">❓</span> <span data-i18n="nav_help">Help</span></a></li>
+                <li><a onclick="nav('privacy')"><span class="ic">🔒</span> <span
+                            data-i18n="nav_privacy">Privacy</span></a></li>
+                <li><a onclick="nav('settings')"><span class="ic">⚙️</span> <span
+                            data-i18n="nav_settings">Settings</span></a></li>
             </ul>
             <div class="sidebar-spacer"></div>
             <div class="sidebar-footer" onclick="openProfile()">
@@ -68,242 +96,394 @@
             </div>
         </aside>
 
-        <!-- MAIN -->
+        <!-- MAIN COLUMN -->
         <div class="main-col">
-            <!-- Topbar -->
+
+            <!-- TOPBAR -->
             <header class="topbar">
-                <div>
-                    <h1 id="pageTitle">Dashboard</h1>
-                    <div class="sub" id="pageSub">Multilingual sarcasm &amp; sentiment detection</div>
+                <div style="display:flex;align-items:center;gap:10px">
+                    <button class="icon-btn hamburger" id="hamburgerBtn" onclick="toggleSidebar()"
+                        title="Menu">☰</button>
+                    <div>
+                        <h1 id="pageTitle" data-i18n="nav_dashboard">Dashboard</h1>
+                        <div class="sub" id="pageSub">Multilingual sarcasm &amp; sentiment detection</div>
+                    </div>
                 </div>
                 <div class="topbar-actions">
-                    <div class="icon-btn" title="Search" onclick="nav('history')">🔍</div>
                     <div class="icon-btn" title="Alerts" onclick="nav('alerts')" id="topAlertIcon">🔔</div>
+                    <div class="icon-btn" title="Translate" onclick="nav('translate')">🌐</div>
                     <div class="avatar-pill" onclick="openProfile()">
                         <div class="avatar-sm" id="topbarInitials">KH</div>
-                        <span style="font-size:13px;font-weight:700" id="topbarShortName">Kaweri</span>
+                        <span id="topbarShortName">Kaweri</span>
                     </div>
                 </div>
             </header>
 
-            <!-- Sarcasm trend alert banner -->
+            <!-- ALERT BANNER -->
             <div class="alert-banner" id="alertBanner">
                 <span>🚨</span>
-                <span id="alertBannerText">Sarcasm spike detected — high-confidence sarcastic content trending!</span>
+                <span id="alertBannerText">Sarcasm spike detected!</span>
                 <span class="close-alert" onclick="dismissBanner()">✕</span>
             </div>
 
-            <!-- ===== DASHBOARD ===== -->
-            <section class="section active" id="sec-dashboard">
-                <div class="stat-row">
-                    <div class="stat-card">
-                        <div class="label">🎯 Model Accuracy</div>
-                        <div class="value" id="statAccuracy">—%</div>
-                        <div class="bar-track">
-                            <div class="bar-fill" id="accuracyBar" style="width:0%"></div>
-                        </div>
-                        <div class="compare">From model_metrics.json</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="label">📈 Total Analyses</div>
-                        <div class="value" id="statTotal">0</div>
-                        <div class="bar-track">
-                            <div class="bar-fill" style="width:55%"></div>
-                        </div>
-                        <div class="compare">Logged in history</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="label">😏 Sarcastic Rate</div>
-                        <div class="value" id="statRate">0%</div>
-                        <div class="bar-track">
-                            <div class="bar-fill" style="width:0%" id="rateBar"></div>
-                        </div>
-                        <div class="compare">Of all analyzed sentences</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="label">🌍 Languages Seen</div>
-                        <div class="value" id="statLangs">0</div>
-                        <div class="bar-track">
-                            <div class="bar-fill" style="width:33%"></div>
-                        </div>
-                        <div class="compare">Distinct language codes</div>
-                    </div>
-                </div>
+            <div class="content">
 
-                <div class="grid-row">
-                    <div class="panel panel-input">
-                        <h2>Analyze a Sentence</h2>
-                        <div class="input-box-wrap">
-                            <textarea id="inputText" class="input-box"
-                                placeholder="Type or speak a sentence to detect sarcasm..."></textarea>
-                            <button id="micBtn" class="mic-btn" title="Click to speak">🎙️</button>
+                <!-- ═══ DASHBOARD ═══ -->
+                <section class="section active" id="sec-dashboard">
+                    <div class="stat-row">
+                        <div class="stat-card">
+                            <div class="label">🎯 Model Accuracy</div>
+                            <div class="value" id="statAccuracy">—%</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" id="accuracyBar" style="width:0%"></div>
+                            </div>
+                            <div class="compare">LSTM on Sarcasm Headlines</div>
                         </div>
-                        <div class="mic-status" id="micStatus"></div>
-                        <div class="action-row">
-                            <button id="predictBtn" class="predict-btn" onclick="doPredict()">Predict</button>
-                            <button id="speakBtn" class="speak-btn" onclick="speakResult()" style="display:none">🔊
-                                Speak Result</button>
+                        <div class="stat-card">
+                            <div class="label">📈 Total Analyses</div>
+                            <div class="value" id="statTotal">0</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width:55%"></div>
+                            </div>
+                            <div class="compare">Saved in history</div>
                         </div>
-                        <div class="result-block" id="resultBlock">
-                            <div class="placeholder-msg">Results will appear here after prediction.</div>
+                        <div class="stat-card">
+                            <div class="label">😏 Sarcastic Rate</div>
+                            <div class="value" id="statRate">0%</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" id="rateBar" style="width:0%"></div>
+                            </div>
+                            <div class="compare">Of all predictions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">🌍 Languages Seen</div>
+                            <div class="value" id="statLangs">0</div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width:33%"></div>
+                            </div>
+                            <div class="compare">Distinct codes detected</div>
                         </div>
                     </div>
-                    <div class="panel panel-accuracy">
-                        <h2>Model Accuracy</h2>
-                        <div class="accuracy-ring" id="accuracyRing" style="--pct:0">
-                            <div class="inner">
-                                <div class="num" id="ringNum">—%</div>
-                                <div class="lbl">ACCURACY</div>
+
+                    <div class="grid-row">
+                        <div class="panel panel-input">
+                            <h2 data-i18n="analyze_title">Analyze a Sentence</h2>
+                            <div class="input-box-wrap">
+                                <textarea id="inputText" class="input-box"
+                                    placeholder="Type or speak a sentence…"></textarea>
+                                <button id="micBtn" class="mic-btn" title="Speak">🎙️</button>
+                            </div>
+                            <div class="mic-status" id="micStatus"></div>
+                            <div class="action-row">
+                                <button class="btn-primary" id="predictBtn" onclick="doPredict()">Predict</button>
+                                <button class="btn-secondary" id="speakBtn" onclick="speakResult()"
+                                    style="display:none">🔊 Speak</button>
+                                <button class="btn-ghost" onclick="sendToTranslator()" title="Open in Translator">🌐
+                                    Translate</button>
+                            </div>
+                            <div class="result-block" id="resultBlock">
+                                <div class="placeholder-msg">Results appear here after prediction.</div>
                             </div>
                         </div>
-                        <div style="font-size:12px;color:var(--muted);text-align:center">LSTM trained on<br>Sarcasm
-                            Headlines</div>
-                    </div>
-                </div>
-
-                <div class="grid-row">
-                    <div class="panel panel-chart">
-                        <h2>Confidence Distribution</h2>
-                        <div id="chart" class="chart-canvas"></div>
-                    </div>
-                    <div class="panel" style="flex:1 1 300px">
-                        <h2>Recent Activity</h2>
-                        <div class="history-list" id="dashHistory">
-                            <div class="placeholder-msg">No analyses yet.</div>
+                        <div class="panel panel-accuracy">
+                            <h2>Model Accuracy</h2>
+                            <div class="accuracy-ring" id="accuracyRing" style="--pct:0">
+                                <div class="inner">
+                                    <div class="num" id="ringNum">—%</div>
+                                    <div class="lbl">ACCURACY</div>
+                                </div>
+                            </div>
+                            <div style="font-size:11.5px;color:var(--muted);text-align:center">LSTM · Sarcasm
+                                Headlines<br>TensorFlow 2.15</div>
                         </div>
                     </div>
-                </div>
-            </section>
 
-            <!-- ===== LANGUAGE MIX ===== -->
-            <section class="section" id="sec-language">
-                <div class="section-header">
-                    <div>
-                        <div class="page-title">🌍 Language Mix</div>
-                        <div class="page-sub">Breakdown of detected languages across all analyses</div>
+                    <div class="grid-row">
+                        <div class="panel" style="flex:1 1 300px">
+                            <h2>Confidence Distribution</h2>
+                            <div id="chart" style="min-height:200px;flex:1"></div>
+                        </div>
+                        <div class="panel" style="flex:1 1 280px">
+                            <h2>Recent Activity</h2>
+                            <div class="history-list" id="dashHistory">
+                                <div class="placeholder-msg">No analyses yet.</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="lang-grid" id="langGrid">
-                    <div class="placeholder-msg">Run some predictions first.</div>
-                </div>
-                <div class="grid-row">
-                    <div class="panel" style="flex:1 1 300px">
-                        <h2>Language Distribution</h2>
-                        <div id="langChart" style="min-height:220px;flex:1"></div>
-                    </div>
-                    <div class="panel" style="flex:1 1 300px">
-                        <h2>Sarcasm by Language</h2>
-                        <div id="langSarcasmChart" style="min-height:220px;flex:1"></div>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- ===== SENTIMENT ===== -->
-            <section class="section" id="sec-sentiment">
-                <div class="section-header">
-                    <div>
-                        <div class="page-title">💭 Sentiment Analysis</div>
-                        <div class="page-sub">Emotional tone breakdown of all analyzed text</div>
+                <!-- ═══ TRANSLATOR ═══ -->
+                <section class="section" id="sec-translate">
+                    <div class="section-header">
+                        <div>
+                            <div class="page-title">🌐 Translator</div>
+                            <div class="page-sub">Translate text across 20+ languages · powered by MyMemory API</div>
+                        </div>
                     </div>
-                </div>
-                <div class="sent-cards">
-                    <div class="sent-card pos">
-                        <div class="emoji">😊</div>
-                        <div class="cnt" id="sentPos">0</div>
-                        <div class="lbl">Positive</div>
-                    </div>
-                    <div class="sent-card neg">
-                        <div class="emoji">😔</div>
-                        <div class="cnt" id="sentNeg">0</div>
-                        <div class="lbl">Negative</div>
-                    </div>
-                    <div class="sent-card neu">
-                        <div class="emoji">😐</div>
-                        <div class="cnt" id="sentNeu">0</div>
-                        <div class="lbl">Neutral</div>
-                    </div>
-                </div>
-                <div class="grid-row">
-                    <div class="panel" style="flex:1 1 280px">
-                        <h2>Sentiment Share</h2>
-                        <div id="sentChart" style="min-height:220px;flex:1"></div>
-                    </div>
-                    <div class="panel" style="flex:2 1 380px">
-                        <h2>Sentiment × Sarcasm Crossover</h2>
-                        <div id="sentSarcasmChart" style="min-height:220px;flex:1"></div>
-                    </div>
-                </div>
-            </section>
 
-            <!-- ===== HISTORY ===== -->
-            <section class="section" id="sec-history">
-                <div class="section-header">
-                    <div>
-                        <div class="page-title">🕓 Analysis History</div>
-                        <div class="page-sub">Full log of every prediction made</div>
-                    </div>
-                </div>
-                <div class="panel">
-                    <div class="search-wrap">
-                        <input class="search-box" id="histSearch" placeholder="Search by text, language, or sentiment…"
-                            oninput="filterHistory()">
-                        <button class="predict-btn" style="padding:8px 16px;font-size:13px"
-                            onclick="clearHistory()">Clear</button>
-                    </div>
-                    <div class="history-list" id="fullHistoryList">
-                        <div class="placeholder-msg">No history yet.</div>
-                    </div>
-                </div>
-            </section>
+                    <div class="panel">
+                        <div class="translate-grid">
+                            <!-- SOURCE -->
+                            <div class="translate-box">
+                                <div class="lang-select-bar">
+                                    <select class="lang-sel" id="srcLang">
+                                        <option value="auto">Auto-detect</option>
+                                        <option value="en" selected>🇺🇸 English</option>
+                                        <option value="hi">🇮🇳 Hindi</option>
+                                        <option value="mr">🟠 Marathi</option>
+                                        <option value="es">🇪🇸 Spanish</option>
+                                        <option value="fr">🇫🇷 French</option>
+                                        <option value="de">🇩🇪 German</option>
+                                        <option value="pt">🇧🇷 Portuguese</option>
+                                        <option value="it">🇮🇹 Italian</option>
+                                        <option value="ru">🇷🇺 Russian</option>
+                                        <option value="ja">🇯🇵 Japanese</option>
+                                        <option value="ko">🇰🇷 Korean</option>
+                                        <option value="zh">🇨🇳 Chinese</option>
+                                        <option value="ar">🇸🇦 Arabic</option>
+                                        <option value="bn">🇧🇩 Bengali</option>
+                                        <option value="ta">🇮🇳 Tamil</option>
+                                        <option value="te">🇮🇳 Telugu</option>
+                                        <option value="kn">🇮🇳 Kannada</option>
+                                        <option value="gu">🇮🇳 Gujarati</option>
+                                        <option value="pa">🇮🇳 Punjabi</option>
+                                        <option value="ur">🇵🇰 Urdu</option>
+                                        <option value="tr">🇹🇷 Turkish</option>
+                                        <option value="nl">🇳🇱 Dutch</option>
+                                    </select>
+                                    <button class="mic-btn" id="transMicBtn" title="Speak source"
+                                        style="position:static;width:30px;height:30px">🎙️</button>
+                                </div>
+                                <textarea class="translate-ta" id="srcText" placeholder="Enter text to translate…"
+                                    oninput="updateCharCount()" maxlength="2000"></textarea>
+                                <div style="display:flex;align-items:center;gap:8px">
+                                    <span class="char-count" id="charCount">0 / 2000</span>
+                                    <span class="detect-badge" id="detectBadge" style="display:none">🔍 <span
+                                            id="detectedLang">—</span></span>
+                                </div>
+                                <div class="translate-actions">
+                                    <button class="btn-primary" onclick="doTranslate()">Translate</button>
+                                    <button class="btn-ghost" onclick="clearTranslator()">Clear</button>
+                                </div>
+                            </div>
 
-            <!-- ===== ALERTS ===== -->
-            <section class="section" id="sec-alerts">
-                <div class="section-header">
-                    <div>
-                        <div class="page-title">🚨 Alerts</div>
-                        <div class="page-sub">Triggered when high-confidence sarcasm is detected</div>
-                    </div>
-                    <button class="predict-btn" style="padding:8px 16px;font-size:12px" onclick="clearAlerts()">Clear
-                        All</button>
-                </div>
-                <div class="panel">
-                    <div id="alertsList">
-                        <div class="empty-state">No alerts triggered yet.<br>Alerts fire when sarcasm confidence &gt;
-                            80%.</div>
-                    </div>
-                </div>
-                <div class="info-card">
-                    <h3>How Alerts Work</h3>
-                    <p>An alert is generated whenever the model returns a sarcastic prediction with confidence above
-                        80%. This helps flag high-certainty sarcastic content in real time. Alerts also appear as a
-                        banner at the top of the dashboard.</p>
-                </div>
-            </section>
+                            <!-- ARROW / SWAP -->
+                            <div
+                                style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:8px 4px">
+                                <button class="swap-btn" onclick="swapLangs()" title="Swap languages">⇄</button>
+                                <div style="font-size:11px;color:var(--muted);text-align:center">swap</div>
+                            </div>
 
-            <!-- ===== MODEL INFO ===== -->
-            <section class="section" id="sec-model">
-                <div class="section-header">
-                    <div>
-                        <div class="page-title">🧠 Model Info</div>
-                        <div class="page-sub">Architecture, training details, and performance</div>
+                            <!-- TARGET -->
+                            <div class="translate-box">
+                                <div class="lang-select-bar">
+                                    <select class="lang-sel" id="tgtLang">
+                                        <option value="en">🇺🇸 English</option>
+                                        <option value="hi" selected>🇮🇳 Hindi</option>
+                                        <option value="mr">🟠 Marathi</option>
+                                        <option value="es">🇪🇸 Spanish</option>
+                                        <option value="fr">🇫🇷 French</option>
+                                        <option value="de">🇩🇪 German</option>
+                                        <option value="pt">🇧🇷 Portuguese</option>
+                                        <option value="it">🇮🇹 Italian</option>
+                                        <option value="ru">🇷🇺 Russian</option>
+                                        <option value="ja">🇯🇵 Japanese</option>
+                                        <option value="ko">🇰🇷 Korean</option>
+                                        <option value="zh">🇨🇳 Chinese</option>
+                                        <option value="ar">🇸🇦 Arabic</option>
+                                        <option value="bn">🇧🇩 Bengali</option>
+                                        <option value="ta">🇮🇳 Tamil</option>
+                                        <option value="te">🇮🇳 Telugu</option>
+                                        <option value="kn">🇮🇳 Kannada</option>
+                                        <option value="gu">🇮🇳 Gujarati</option>
+                                        <option value="pa">🇮🇳 Punjabi</option>
+                                        <option value="ur">🇵🇰 Urdu</option>
+                                        <option value="tr">🇹🇷 Turkish</option>
+                                        <option value="nl">🇳🇱 Dutch</option>
+                                    </select>
+                                    <button class="btn-ghost" style="padding:6px 10px;font-size:12px"
+                                        onclick="copyTranslation()">📋 Copy</button>
+                                </div>
+                                <textarea class="translate-ta output-ta" id="tgtText"
+                                    placeholder="Translation appears here…" readonly></textarea>
+                                <div id="transStatus" style="font-size:11.5px;color:var(--muted);min-height:16px"></div>
+                                <div class="translate-actions">
+                                    <button class="btn-secondary" onclick="analyzeTranslation()">🔍 Analyze for
+                                        Sarcasm</button>
+                                    <button class="btn-ghost" onclick="speakTranslation()">🔊 Speak</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="grid-row">
-                    <div class="panel" style="flex:1 1 300px">
-                        <h2>Architecture</h2>
-                        <div class="arch-steps">
+
+                    <!-- Quick translate chips -->
+                    <div class="panel">
+                        <h2>Quick Phrases — Try These</h2>
+                        <div style="display:flex;flex-wrap:wrap;gap:7px">
+                            <span class="filter-chip" onclick="quickTranslate('Oh great, another Monday morning!')">Oh
+                                great, another Monday!</span>
+                            <span class="filter-chip" onclick="quickTranslate('Waah! kya problem hai')">Waah! kya
+                                problem hai</span>
+                            <span class="filter-chip"
+                                onclick="quickTranslate('Sure, I absolutely love waiting in queues.')">Love waiting in
+                                queues</span>
+                            <span class="filter-chip"
+                                onclick="quickTranslate('Amazing! My internet stopped again.')">Amazing! Internet
+                                stopped</span>
+                            <span class="filter-chip" onclick="quickTranslate('Khup chan aahe!')">Khup chan aahe!</span>
+                            <span class="filter-chip"
+                                onclick="quickTranslate('Yeah right, that worked perfectly.')">Yeah right,
+                                perfect</span>
+                        </div>
+                    </div>
+
+                    <!-- Translation history -->
+                    <div class="panel">
+                        <h2>Translation History</h2>
+                        <div class="history-list" id="transHistory">
+                            <div class="placeholder-msg">No translations yet.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══ LANGUAGE MIX ═══ -->
+                <section class="section" id="sec-language">
+                    <div class="section-header">
+                        <div>
+                            <div class="page-title">🗺️ Language Mix</div>
+                            <div class="page-sub">Breakdown of all detected languages</div>
+                        </div>
+                    </div>
+                    <div class="lang-grid" id="langGrid">
+                        <div class="placeholder-msg">Run some predictions first.</div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="panel" style="flex:1 1 280px">
+                            <h2>Share by Language</h2>
+                            <div id="langChart" style="min-height:200px;flex:1"></div>
+                        </div>
+                        <div class="panel" style="flex:1 1 280px">
+                            <h2>Sarcasm by Language</h2>
+                            <div id="langSarcasmChart" style="min-height:200px;flex:1"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══ SENTIMENT ═══ -->
+                <section class="section" id="sec-sentiment">
+                    <div class="section-header">
+                        <div>
+                            <div class="page-title">💭 Sentiment</div>
+                            <div class="page-sub">Emotional tone across all analyzed text</div>
+                        </div>
+                    </div>
+                    <div class="sent-cards">
+                        <div class="sent-card pos">
+                            <div class="emoji">😊</div>
+                            <div class="cnt" id="sentPos">0</div>
+                            <div class="lbl">Positive</div>
+                        </div>
+                        <div class="sent-card neg">
+                            <div class="emoji">😔</div>
+                            <div class="cnt" id="sentNeg">0</div>
+                            <div class="lbl">Negative</div>
+                        </div>
+                        <div class="sent-card neu">
+                            <div class="emoji">😐</div>
+                            <div class="cnt" id="sentNeu">0</div>
+                            <div class="lbl">Neutral</div>
+                        </div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="panel" style="flex:1 1 250px">
+                            <h2>Sentiment Share</h2>
+                            <div id="sentChart" style="min-height:200px;flex:1"></div>
+                        </div>
+                        <div class="panel" style="flex:2 1 340px">
+                            <h2>Sentiment × Sarcasm</h2>
+                            <div id="sentSarcasmChart" style="min-height:200px;flex:1"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══ HISTORY ═══ -->
+                <section class="section" id="sec-history">
+                    <div class="section-header">
+                        <div>
+                            <div class="page-title">🕓 History</div>
+                            <div class="page-sub">Searchable log of every prediction</div>
+                        </div>
+                        <button class="btn-ghost" style="font-size:12px;padding:7px 14px" onclick="exportCSV()">📥
+                            Export CSV</button>
+                    </div>
+                    <div class="panel">
+                        <div class="search-row">
+                            <input class="search-box" id="histSearch" placeholder="Search text, language, sentiment…"
+                                oninput="filterHistory()">
+                            <button class="btn-ghost" style="font-size:12px;padding:7px 14px"
+                                onclick="document.getElementById('histSearch').value='';filterHistory()">Clear</button>
+                        </div>
+                        <div class="filter-row">
+                            <span class="filter-chip active" onclick="setFilter('all',this)">All</span>
+                            <span class="filter-chip" onclick="setFilter('sarcastic',this)">😏 Sarcastic</span>
+                            <span class="filter-chip" onclick="setFilter('not',this)">🙂 Not Sarcastic</span>
+                            <span class="filter-chip" onclick="setFilter('english',this)">🇺🇸 English</span>
+                            <span class="filter-chip" onclick="setFilter('hindi',this)">🇮🇳 Hindi</span>
+                            <span class="filter-chip" onclick="setFilter('marathi',this)">🟠 Marathi</span>
+                        </div>
+                        <div class="history-list" id="fullHistoryList">
+                            <div class="placeholder-msg">No history yet.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══ ALERTS ═══ -->
+                <section class="section" id="sec-alerts">
+                    <div class="section-header">
+                        <div>
+                            <div class="page-title">🚨 Alerts</div>
+                            <div class="page-sub">High-confidence sarcasm spike notifications</div>
+                        </div>
+                        <button class="btn-ghost" style="font-size:12px;padding:7px 14px" onclick="clearAlerts()">Clear
+                            All</button>
+                    </div>
+                    <div class="panel">
+                        <div id="alertsList">
+                            <div class="empty-state">No alerts yet.<br>Alerts fire when confidence exceeds the threshold
+                                set in Settings.</div>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h3>How Alerts Work</h3>
+                        <p>An alert fires when the model returns a sarcastic prediction with confidence above the
+                            threshold (default 80%). They appear as a banner at the top of the page and are logged here
+                            for review.</p>
+                    </div>
+                </section>
+
+                <!-- ═══ MODEL INFO ═══ -->
+                <section class="section" id="sec-model">
+                    <div class="section-header">
+                        <div>
+                            <div class="page-title">🧠 Model Info</div>
+                            <div class="page-sub">Architecture, training details &amp; performance</div>
+                        </div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="panel" style="flex:1 1 280px">
+                            <h2>Architecture</h2>
                             <div class="arch-step">
                                 <div class="step-dot">1</div>
                                 <div class="step-info">
                                     <div class="title">Input Text</div>
-                                    <div class="desc">Raw sentence entered by the user</div>
+                                    <div class="desc">Raw sentence from user or translator</div>
                                 </div>
                             </div>
                             <div class="arch-step">
                                 <div class="step-dot">2</div>
                                 <div class="step-info">
                                     <div class="title">Tokenizer</div>
-                                    <div class="desc">Vocab size 10,000 · OOV token &lt;OOV&gt;</div>
+                                    <div class="desc">Vocab 10,000 · OOV token &lt;OOV&gt;</div>
                                 </div>
                             </div>
                             <div class="arch-step">
@@ -317,337 +497,511 @@
                                 <div class="step-dot">4</div>
                                 <div class="step-info">
                                     <div class="title">Embedding Layer</div>
-                                    <div class="desc">Vocab 10k → 64-dim dense vectors</div>
+                                    <div class="desc">10k vocab → 64-dim dense vectors</div>
                                 </div>
                             </div>
                             <div class="arch-step">
                                 <div class="step-dot">5</div>
                                 <div class="step-info">
-                                    <div class="title">LSTM Layer</div>
-                                    <div class="desc">64 units · captures sequence context</div>
+                                    <div class="title">LSTM (64 units)</div>
+                                    <div class="desc">Captures long-range sequence context</div>
                                 </div>
                             </div>
                             <div class="arch-step">
                                 <div class="step-dot">6</div>
                                 <div class="step-info">
-                                    <div class="title">Dense (ReLU)</div>
-                                    <div class="desc">24 neurons · feature extraction</div>
+                                    <div class="title">Dense · ReLU (24)</div>
+                                    <div class="desc">Feature extraction layer</div>
                                 </div>
                             </div>
                             <div class="arch-step">
                                 <div class="step-dot">7</div>
                                 <div class="step-info">
-                                    <div class="title">Dense (Sigmoid)</div>
-                                    <div class="desc">1 neuron · binary classification output</div>
+                                    <div class="title">Dense · Sigmoid (1)</div>
+                                    <div class="desc">Binary classification output</div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="panel" style="flex:1 1 280px">
-                        <h2>Training Details</h2>
-                        <table class="model-table">
-                            <tr>
-                                <th>Parameter</th>
-                                <th>Value</th>
-                            </tr>
-                            <tr>
-                                <td>Dataset</td>
-                                <td>Sarcasm Headlines JSON</td>
-                            </tr>
-                            <tr>
-                                <td>Train / Test Split</td>
-                                <td>80% / 20%</td>
-                            </tr>
-                            <tr>
-                                <td>Optimizer</td>
-                                <td>Adam</td>
-                            </tr>
-                            <tr>
-                                <td>Loss Function</td>
-                                <td>Binary Crossentropy</td>
-                            </tr>
-                            <tr>
-                                <td>Epochs</td>
-                                <td>10</td>
-                            </tr>
-                            <tr>
-                                <td>Vocabulary Size</td>
-                                <td>10,000</td>
-                            </tr>
-                            <tr>
-                                <td>Max Sequence Length</td>
-                                <td>40 tokens</td>
-                            </tr>
-                            <tr>
-                                <td>Embedding Dims</td>
-                                <td>64</td>
-                            </tr>
-                            <tr>
-                                <td>Framework</td>
-                                <td>TensorFlow / Keras 2.15</td>
-                            </tr>
-                            <tr>
-                                <td>Sentiment Analysis</td>
-                                <td>TextBlob</td>
-                            </tr>
-                            <tr>
-                                <td>Language Detection</td>
-                                <td>Word-list heuristic</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                <div class="panel">
-                    <h2>Supported Languages</h2>
-                    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
-                        <div class="lang-card" style="flex:1 1 150px">
-                            <div class="flag">🇺🇸</div>
-                            <div class="lang-name">English</div>
-                            <div class="lang-pct">Primary training language</div>
-                        </div>
-                        <div class="lang-card" style="flex:1 1 150px">
-                            <div class="flag">🇮🇳</div>
-                            <div class="lang-name">Hindi / Hinglish</div>
-                            <div class="lang-pct">Word-list detection</div>
-                        </div>
-                        <div class="lang-card" style="flex:1 1 150px">
-                            <div class="flag">🟠</div>
-                            <div class="lang-name">Marathi</div>
-                            <div class="lang-pct">Word-list detection</div>
+                        <div class="panel" style="flex:1 1 260px">
+                            <h2>Training Details</h2>
+                            <table class="model-table">
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                                <tr>
+                                    <td>Dataset</td>
+                                    <td>Sarcasm Headlines JSON</td>
+                                </tr>
+                                <tr>
+                                    <td>Train / Test Split</td>
+                                    <td>80% / 20%</td>
+                                </tr>
+                                <tr>
+                                    <td>Optimizer</td>
+                                    <td>Adam</td>
+                                </tr>
+                                <tr>
+                                    <td>Loss</td>
+                                    <td>Binary Crossentropy</td>
+                                </tr>
+                                <tr>
+                                    <td>Epochs</td>
+                                    <td>10</td>
+                                </tr>
+                                <tr>
+                                    <td>Vocab Size</td>
+                                    <td>10,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Max Seq Length</td>
+                                    <td>40 tokens</td>
+                                </tr>
+                                <tr>
+                                    <td>Embedding Dims</td>
+                                    <td>64</td>
+                                </tr>
+                                <tr>
+                                    <td>Framework</td>
+                                    <td>TensorFlow / Keras 2.15</td>
+                                </tr>
+                                <tr>
+                                    <td>Sentiment</td>
+                                    <td>TextBlob</td>
+                                </tr>
+                                <tr>
+                                    <td>Lang Detection</td>
+                                    <td>Word-list heuristic</td>
+                                </tr>
+                                <tr>
+                                    <td>Translation</td>
+                                    <td>MyMemory API (20+ langs)</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
-                </div>
-            </section>
+                    <div class="panel">
+                        <h2>Roadmap — Future Enhancements</h2>
+                        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+                            <span class="badge" style="background:var(--blue-soft);color:var(--blue)">🤖 BERT /
+                                IndicBERT</span>
+                            <span class="badge" style="background:var(--purple-soft);color:var(--purple)">🎙️ Voice
+                                Sarcasm</span>
+                            <span class="badge" style="background:var(--good-soft);color:var(--good)">🐦 Twitter
+                                Integration</span>
+                            <span class="badge" style="background:var(--warn-soft);color:var(--warn)">📱 WhatsApp
+                                Plugin</span>
+                            <span class="badge" style="background:var(--bad-soft);color:var(--bad)">😂 Meme
+                                Detection</span>
+                            <span class="badge">🌏 IndicBERT Support</span>
+                            <span class="badge">📊 Batch CSV Analysis</span>
+                        </div>
+                    </div>
+                </section>
 
-            <!-- ===== HELP ===== -->
-            <section class="section" id="sec-help">
-                <div class="section-header">
-                    <div>
-                        <div class="page-title">❓ Help</div>
-                        <div class="page-sub">How to use Sarcasm Sense</div>
+                <!-- ═══ HELP ═══ -->
+                <section class="section" id="sec-help">
+                    <div class="section-header">
+                        <div>
+                            <div class="page-title">❓ Help</div>
+                            <div class="page-sub">How to use Sarcasm Sense</div>
+                        </div>
                     </div>
-                </div>
-                <div class="info-card">
-                    <h3>Getting Started</h3>
-                    <ul>
-                        <li>Type any sentence in the <strong>Dashboard</strong> input box and click <em>Predict</em>.
-                        </li>
-                        <li>Or tap the <strong>🎙️ mic button</strong> and speak aloud — your voice is transcribed
-                            automatically.</li>
-                        <li>The result shows the detected <strong>language</strong>, <strong>sentiment</strong>,
-                            <strong>sarcasm verdict</strong>, and a <strong>confidence score</strong>.
-                        </li>
-                        <li>Click <strong>🔊 Speak Result</strong> to have the verdict read aloud using your browser's
-                            text-to-speech engine.</li>
-                    </ul>
-                </div>
-                <div class="info-card" style="margin-top:0">
-                    <h3>Pages Explained</h3>
-                    <ul>
-                        <li><strong>Language Mix</strong> — charts showing which languages have been detected across all
-                            your analyses.</li>
-                        <li><strong>Sentiment</strong> — positive / negative / neutral breakdown and how sentiment
-                            correlates with sarcasm.</li>
-                        <li><strong>History</strong> — searchable log of every prediction. Use the search box to filter
-                            by text or language.</li>
-                        <li><strong>Alerts</strong> — auto-triggered when a prediction is sarcastic with confidence &gt;
-                            80%.</li>
-                        <li><strong>Model Info</strong> — LSTM architecture, training parameters, and supported
-                            languages.</li>
-                    </ul>
-                </div>
-                <div class="info-card" style="margin-top:0">
-                    <h3>Speech-to-Text Tips</h3>
-                    <ul>
-                        <li>Works best in <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong>.</li>
-                        <li>Allow microphone access when the browser prompts you.</li>
-                        <li>For Hindi or Marathi, try speaking naturally — the transcript may include Romanized words.
-                        </li>
-                        <li>You can edit the transcript in the text box before clicking Predict.</li>
-                    </ul>
-                </div>
-            </section>
+                    <div class="info-card">
+                        <h3>Getting Started</h3>
+                        <ul>
+                            <li>Type any sentence in <strong>Dashboard</strong> and click <em>Predict</em>.</li>
+                            <li>Tap <strong>🎙️</strong> to speak instead of typing — transcript fills the box
+                                automatically.</li>
+                            <li>Use <strong>🌐 Translator</strong> to translate text before or after analysis across 20+
+                                languages.</li>
+                            <li>Click <strong>🔊 Speak</strong> to have the verdict read aloud via text-to-speech.</li>
+                            <li>After translation, tap <strong>"Analyze for Sarcasm"</strong> to send the translated
+                                text to the predictor.</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>Translator Guide</h3>
+                        <ul>
+                            <li>Select source and target languages, or choose <em>Auto-detect</em> for the source.</li>
+                            <li>Use the <strong>⇄ swap</strong> button to reverse the language pair instantly.</li>
+                            <li>Try the <strong>Quick Phrases</strong> chips to explore sarcasm across languages.</li>
+                            <li>Translation history is kept in-session for quick reference.</li>
+                            <li>Powered by the <strong>MyMemory free API</strong> — no API key required.</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>Mobile Tips</h3>
+                        <ul>
+                            <li>Use the <strong>bottom navigation bar</strong> to switch between Dashboard, Translator,
+                                History, Alerts, and More.</li>
+                            <li>Tap <strong>☰</strong> in the top-left to open the full sidebar on mobile.</li>
+                            <li>Speech-to-text works in <strong>Chrome for Android</strong> and <strong>Safari for
+                                    iOS</strong>.</li>
+                            <li>Add to your home screen for an app-like experience (Share → Add to Home Screen).</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>History &amp; Export</h3>
+                        <ul>
+                            <li>Use the search box and filter chips to narrow results by verdict, language, or text.
+                            </li>
+                            <li>Click <strong>Export CSV</strong> to download your full prediction history as a
+                                spreadsheet.</li>
+                        </ul>
+                    </div>
+                </section>
 
-            <!-- ===== PRIVACY ===== -->
-            <section class="section" id="sec-privacy">
-                <div class="section-header">
-                    <div>
-                        <div class="page-title">🔒 Privacy</div>
-                        <div class="page-sub">How your data is handled</div>
+                <!-- ═══ PRIVACY ═══ -->
+                <section class="section" id="sec-privacy">
+                    <div class="section-header">
+                        <div>
+                            <div class="page-title">🔒 Privacy</div>
+                            <div class="page-sub">How your data is handled</div>
+                        </div>
                     </div>
-                </div>
-                <div class="info-card">
-                    <h3>Data Storage</h3>
-                    <p>All predictions are saved locally to <code>analysis_history.json</code> on the server running
-                        this app. No data is sent to any external service or third party.</p>
-                </div>
-                <div class="info-card" style="margin-top:0">
-                    <h3>Speech Input</h3>
-                    <p>When you use the microphone button, your audio is processed by your browser's built-in Web Speech
-                        API (provided by Google in Chrome). Audio is not stored by this application — only the resulting
-                        text transcript is used for prediction.</p>
-                </div>
-                <div class="info-card" style="margin-top:0">
-                    <h3>Profile Information</h3>
-                    <p>Profile data (name, role, GitHub) is saved only in your browser's session memory and is never
-                        sent to the server. It resets when you close the tab.</p>
-                </div>
-                <div class="info-card" style="margin-top:0">
-                    <h3>Text-to-Speech Output</h3>
-                    <p>The Speak Result feature uses the browser's built-in <code>speechSynthesis</code> API and runs
-                        entirely locally on your device. No audio leaves your browser.</p>
-                </div>
-            </section>
+                    <div class="info-card">
+                        <h3>Prediction Data</h3>
+                        <p>All predictions are saved to <code>analysis_history.json</code> on the local server. No
+                            prediction data is sent to external services.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Translation</h3>
+                        <p>Translations use the <strong>MyMemory public API</strong>. Text you translate is sent to
+                            MyMemory's servers. Do not translate sensitive or personal information. See <a
+                                href="https://mymemory.translated.net/doc/spec.php" target="_blank">MyMemory's
+                                terms</a>.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Speech Input</h3>
+                        <p>Microphone input is processed by your browser's Web Speech API (Google in Chrome). Only the
+                            resulting text transcript is used — no audio is stored by this app.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Profile &amp; Settings</h3>
+                        <p>Profile data and settings are stored in your browser's <code>localStorage</code> and never
+                            sent to the server. They persist across sessions on the same device.</p>
+                    </div>
+                </section>
 
-            <!-- ===== SETTINGS ===== -->
-            <section class="section" id="sec-settings">
-                <div class="section-header">
-                    <div>
-                        <div class="page-title">⚙️ Settings</div>
-                        <div class="page-sub">Customize your experience</div>
+                <!-- ═══ SETTINGS ═══ -->
+                <section class="section" id="sec-settings">
+                    <div class="section-header">
+                        <div>
+                            <div class="page-title">⚙️ Settings</div>
+                            <div class="page-sub">Customize Sarcasm Sense</div>
+                        </div>
                     </div>
-                </div>
-                <div class="panel">
-                    <h2>Speech & Audio</h2>
-                    <div class="result-row"><span class="k">Speech recognition language</span>
-                        <select id="langSelect"
-                            style="border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;font-family:inherit;font-size:13px;background:var(--bg)"
-                            onchange="updateSpeechLang()">
-                            <option value="en-IN">English (India)</option>
-                            <option value="en-US">English (US)</option>
-                            <option value="hi-IN">Hindi</option>
-                            <option value="mr-IN">Marathi</option>
-                        </select>
+                    <div class="panel">
+                        <h2>Speech &amp; Audio</h2>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Speech Language</div>
+                                <div class="setting-desc">Language used by the microphone for recognition</div>
+                            </div>
+                            <div class="setting-control"><select id="speechLangSel" onchange="updateSpeechLang()">
+                                    <option value="en-IN">English (India)</option>
+                                    <option value="en-US">English (US)</option>
+                                    <option value="hi-IN">Hindi</option>
+                                    <option value="mr-IN">Marathi</option>
+                                    <option value="es-ES">Spanish</option>
+                                    <option value="fr-FR">French</option>
+                                    <option value="de-DE">German</option>
+                                    <option value="ja-JP">Japanese</option>
+                                    <option value="ar-SA">Arabic</option>
+                                    <option value="bn-IN">Bengali</option>
+                                    <option value="ta-IN">Tamil</option>
+                                    <option value="te-IN">Telugu</option>
+                                </select></div>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">TTS Speech Rate</div>
+                                <div class="setting-desc">Speed of the Speak Result voice</div>
+                            </div>
+                            <div class="setting-control"><input type="range" id="ttsRate" min="0.5" max="2" step="0.1"
+                                    value="1"></div>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Auto-Speak Results</div>
+                                <div class="setting-desc">Read verdict aloud after every prediction</div>
+                            </div>
+                            <div class="setting-control"><button class="toggle" id="autoSpeakToggle"
+                                    onclick="toggleSetting('autoSpeakToggle','autoSpeak')"></button></div>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Auto-Translate Before Predict</div>
+                                <div class="setting-desc">Translate to English first when non-English detected</div>
+                            </div>
+                            <div class="setting-control"><button class="toggle" id="autoTransToggle"
+                                    onclick="toggleSetting('autoTransToggle','autoTrans')"></button></div>
+                        </div>
                     </div>
-                    <div class="result-row" style="margin-top:12px"><span class="k">Text-to-speech voice speed</span>
-                        <input type="range" min="0.5" max="2" step="0.1" value="1" id="ttsRate" style="width:140px">
+                    <div class="panel">
+                        <h2>Alerts &amp; Dashboard</h2>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Alert Confidence Threshold</div>
+                                <div class="setting-desc">Fire alert when sarcasm confidence exceeds this %</div>
+                            </div>
+                            <div class="setting-control"><input type="number" id="alertThreshold" value="80" min="50"
+                                    max="100" style="width:70px"></div>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">History Page Size</div>
+                                <div class="setting-desc">Max records to load per page</div>
+                            </div>
+                            <div class="setting-control"><select id="histPageSize">
+                                    <option value="10">10</option>
+                                    <option value="20" selected>20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select></div>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Default Translator Target</div>
+                                <div class="setting-desc">Default language for translation output</div>
+                            </div>
+                            <div class="setting-control"><select id="defaultTargetLang"
+                                    onchange="document.getElementById('tgtLang').value=this.value">
+                                    <option value="hi" selected>Hindi</option>
+                                    <option value="en">English</option>
+                                    <option value="mr">Marathi</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                </select></div>
+                        </div>
                     </div>
-                    <div class="result-row"><span class="k">Auto-speak results</span>
-                        <input type="checkbox" id="autoSpeak" style="width:18px;height:18px">
+                    <div class="panel">
+                        <h2>About</h2>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Version</div>
+                            </div>
+                            <div class="setting-control" style="color:var(--muted);font-size:12.5px">2.0.0 — Mobile +
+                                Translator</div>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Author</div>
+                            </div>
+                            <div class="setting-control" style="color:var(--muted);font-size:12.5px">Kaweri Harinkhede
+                            </div>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Reset All Settings</div>
+                            </div>
+                            <div class="setting-control"><button class="btn-ghost"
+                                    style="font-size:12px;padding:7px 14px;color:var(--bad)"
+                                    onclick="if(confirm('Reset all settings?')){localStorage.clear();location.reload()}">Reset</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="panel">
-                    <h2>Dashboard</h2>
-                    <div class="result-row"><span class="k">Alert threshold (confidence %)</span>
-                        <input type="number" id="alertThreshold" value="80" min="50" max="100"
-                            style="border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;width:80px;font-size:13px">
-                    </div>
-                    <div class="result-row" style="margin-top:10px"><span class="k">History items per page</span>
-                        <select id="histPageSize"
-                            style="border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;font-family:inherit;font-size:13px;background:var(--bg)">
-                            <option value="10">10</option>
-                            <option value="20" selected>20</option>
-                            <option value="50">50</option>
-                        </select>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Footer -->
+            </div><!-- /content -->
+
             <footer class="app-footer">
                 <span>© 2026 Sarcasm Sense · Kaweri Harinkhede</span>
                 <div class="footer-links">
                     <span onclick="nav('help')">Help</span>
                     <span onclick="nav('privacy')">Privacy</span>
-                    <span onclick="nav('model')">Model Info</span>
-                    <a href="https://github.com/Kaweri05/sarcasm-detection" target="_blank">GitHub</a>
+                    <span onclick="nav('model')">Model</span>
+                    <a href="https://github.com/Kaweri05/sarcasm-detection" target="_blank">GitHub ↗</a>
                 </div>
             </footer>
+        </div><!-- /main-col -->
+    </div><!-- /app-shell -->
+
+    <!-- ═══ BOTTOM NAV (mobile) ═══ -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-inner">
+            <button class="bnav-item active" id="bn-dashboard" onclick="nav('dashboard')"><span
+                    class="b-ic">📊</span>Home</button>
+            <button class="bnav-item" id="bn-translate" onclick="nav('translate')"><span
+                    class="b-ic">🌐</span>Translate</button>
+            <button class="bnav-item" id="bn-history" onclick="nav('history')"><span
+                    class="b-ic">🕓</span>History</button>
+            <button class="bnav-item" id="bn-alerts" onclick="nav('alerts')"><span class="b-ic">🚨</span>Alerts</button>
+            <button class="bnav-item" id="bn-more" onclick="toggleSidebar()"><span class="b-ic">☰</span>More</button>
         </div>
-    </div>
+    </nav>
 
     <script>
-        /* ====== State ====== */
-        let allHistory = [];
-        let alertsList = [];
-        let lastResult = null;
-        let speechLang = 'en-IN';
+        /* ════════════════════════════════
+           STATE & CONFIG
+           ════════════════════════════════ */
+        let allHistory = [], alertsList = [], transHistory = [], lastResult = null, histFilter = 'all';
+        const settings = JSON.parse(localStorage.getItem('ss_settings') || '{}');
+        const profile = JSON.parse(localStorage.getItem('ss_profile') || '{}');
 
-        /* ====== Navigation ====== */
+        /* ════════════════════════════════
+           i18n (lightweight)
+           ════════════════════════════════ */
+        const i18n = {
+            en: { nav_dashboard: 'Dashboard', nav_translate: 'Translator', nav_language: 'Language Mix', nav_sentiment: 'Sentiment', nav_history: 'History', nav_alerts: 'Alerts', nav_model: 'Model Info', nav_help: 'Help', nav_privacy: 'Privacy', nav_settings: 'Settings', nav_workspace: 'Workspace', nav_system: 'System', analyze_title: 'Analyze a Sentence' },
+            hi: { nav_dashboard: 'डैशबोर्ड', nav_translate: 'अनुवादक', nav_language: 'भाषा मिश्रण', nav_sentiment: 'भावना', nav_history: 'इतिहास', nav_alerts: 'अलर्ट', nav_model: 'मॉडल जानकारी', nav_help: 'सहायता', nav_privacy: 'गोपनीयता', nav_settings: 'सेटिंग्स', nav_workspace: 'कार्यक्षेत्र', nav_system: 'सिस्टम', analyze_title: 'वाक्य का विश्लेषण करें' },
+            mr: { nav_dashboard: 'डॅशबोर्ड', nav_translate: 'अनुवादक', nav_language: 'भाषा मिश्रण', nav_sentiment: 'भावना', nav_history: 'इतिहास', nav_alerts: 'सूचना', nav_model: 'मॉडेल माहिती', nav_help: 'मदत', nav_privacy: 'गोपनीयता', nav_settings: 'सेटिंग्ज', nav_workspace: 'कार्यक्षेत्र', nav_system: 'सिस्टम', analyze_title: 'वाक्याचे विश्लेषण करा' },
+            es: { nav_dashboard: 'Inicio', nav_translate: 'Traductor', nav_language: 'Idiomas', nav_sentiment: 'Sentimiento', nav_history: 'Historial', nav_alerts: 'Alertas', nav_model: 'Modelo', nav_help: 'Ayuda', nav_privacy: 'Privacidad', nav_settings: 'Ajustes', nav_workspace: 'Área de trabajo', nav_system: 'Sistema', analyze_title: 'Analizar una oración' },
+            fr: { nav_dashboard: 'Tableau de bord', nav_translate: 'Traducteur', nav_language: 'Langues', nav_sentiment: 'Sentiment', nav_history: 'Historique', nav_alerts: 'Alertes', nav_model: 'Modèle', nav_help: 'Aide', nav_privacy: 'Confidentialité', nav_settings: 'Paramètres', nav_workspace: 'Espace de travail', nav_system: 'Système', analyze_title: 'Analyser une phrase' },
+        };
+
+        function applyUILanguage() {
+            const lang = document.getElementById('pUILang')?.value || 'en';
+            const dict = i18n[lang] || i18n.en;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) el.textContent = dict[key];
+            });
+        }
+
+        /* ════════════════════════════════
+           SIDEBAR & NAV
+           ════════════════════════════════ */
         const pageMeta = {
             dashboard: { title: 'Dashboard', sub: 'Multilingual sarcasm & sentiment detection' },
-            language: { title: 'Language Mix', sub: 'Breakdown of detected languages across analyses' },
-            sentiment: { title: 'Sentiment Analysis', sub: 'Emotional tone across all predictions' },
-            history: { title: 'Analysis History', sub: 'Searchable log of all predictions' },
-            alerts: { title: 'Alerts', sub: 'High-confidence sarcasm spike notifications' },
-            model: { title: 'Model Info', sub: 'LSTM architecture and training details' },
-            help: { title: 'Help', sub: 'How to use Sarcasm Sense' },
-            privacy: { title: 'Privacy', sub: 'How your data is handled' },
-            settings: { title: 'Settings', sub: 'Customize your experience' },
+            translate: { title: '🌐 Translator', sub: 'Translate across 20+ languages' },
+            language: { title: '🗺️ Language Mix', sub: 'Breakdown of detected languages' },
+            sentiment: { title: '💭 Sentiment', sub: 'Emotional tone across all predictions' },
+            history: { title: '🕓 History', sub: 'Searchable log of all predictions' },
+            alerts: { title: '🚨 Alerts', sub: 'High-confidence sarcasm notifications' },
+            model: { title: '🧠 Model Info', sub: 'Architecture and training details' },
+            help: { title: '❓ Help', sub: 'How to use Sarcasm Sense' },
+            privacy: { title: '🔒 Privacy', sub: 'How your data is handled' },
+            settings: { title: '⚙️ Settings', sub: 'Customize your experience' },
         };
 
         function nav(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-list a').forEach(a => a.classList.remove('active'));
-            document.getElementById('sec-' + id).classList.add('active');
-            document.querySelectorAll('.nav-list a').forEach(a => {
-                if (a.getAttribute('onclick') === `nav('${id}')`) a.classList.add('active');
-            });
+            document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
+            document.getElementById('sec-' + id)?.classList.add('active');
+            document.querySelectorAll('.nav-list a').forEach(a => { if ((a.getAttribute('onclick') || '').includes(`'${id}'`)) a.classList.add('active'); });
+            const bnMap = { dashboard: 'bn-dashboard', translate: 'bn-translate', history: 'bn-history', alerts: 'bn-alerts' };
+            if (bnMap[id]) document.getElementById(bnMap[id])?.classList.add('active');
             const m = pageMeta[id] || {};
             document.getElementById('pageTitle').textContent = m.title || id;
             document.getElementById('pageSub').textContent = m.sub || '';
+            closeSidebar();
             if (id === 'language') renderLanguagePage();
             if (id === 'sentiment') renderSentimentPage();
             if (id === 'history') renderFullHistory();
             if (id === 'alerts') renderAlertsPage();
         }
 
-        /* ====== Profile ====== */
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('show');
+        }
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('show');
+        }
+
+        /* ════════════════════════════════
+           PROFILE
+           ════════════════════════════════ */
+        function loadProfile() {
+            if (!profile.name) return;
+            document.getElementById('pName').value = profile.name || 'Kaweri Harinkhede';
+            document.getElementById('pRole').value = profile.role || 'Computer Engineering Student';
+            document.getElementById('pGithub').value = profile.github || 'Kaweri05';
+            document.getElementById('pEmail').value = profile.email || '';
+            const initials = getInitials(profile.name || 'KH');
+            ['sidebarInitials', 'topbarInitials', 'profileInitials'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = initials; });
+            if (document.getElementById('sidebarName')) document.getElementById('sidebarName').textContent = profile.name;
+            if (document.getElementById('sidebarRole')) document.getElementById('sidebarRole').textContent = profile.role || 'Project Author';
+            if (document.getElementById('topbarShortName')) document.getElementById('topbarShortName').textContent = (profile.name || '').split(' ')[0];
+        }
+        function getInitials(name) { return name.split(' ').map(w => w[0] || '').join('').toUpperCase().slice(0, 2); }
         function openProfile() { document.getElementById('profileModal').classList.add('show'); }
         function closeProfile() { document.getElementById('profileModal').classList.remove('show'); }
         function saveProfile() {
-            const name = document.getElementById('pName').value || 'User';
-            const role = document.getElementById('pRole').value;
-            const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-            ['sidebarInitials', 'topbarInitials', 'profileInitials'].forEach(id => document.getElementById(id).textContent = initials);
-            document.getElementById('sidebarName').textContent = name;
-            document.getElementById('sidebarRole').textContent = role;
-            document.getElementById('topbarShortName').textContent = name.split(' ')[0];
+            profile.name = document.getElementById('pName').value;
+            profile.role = document.getElementById('pRole').value;
+            profile.github = document.getElementById('pGithub').value;
+            profile.email = document.getElementById('pEmail').value;
+            localStorage.setItem('ss_profile', JSON.stringify(profile));
+            loadProfile();
+            applyUILanguage();
             closeProfile();
         }
         document.getElementById('profileModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeProfile(); });
 
-        /* ====== Speech to Text ====== */
+        /* ════════════════════════════════
+           SPEECH TO TEXT
+           ════════════════════════════════ */
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-        let recognition = null, listening = false;
+        let recognition = null, listening = false, transMicListening = false;
+
+        function makeSR(onResult, statusEl) {
+            if (!SR) return null;
+            const r = new SR();
+            r.continuous = false; r.interimResults = true;
+            r.lang = document.getElementById('speechLangSel')?.value || 'en-IN';
+            r.onstart = () => { document.getElementById(statusEl).textContent = '🎙️ Listening…'; };
+            r.onresult = e => { let t = ''; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; onResult(t); };
+            r.onerror = e => { document.getElementById(statusEl).textContent = 'Mic error: ' + e.error; };
+            r.onend = () => { document.getElementById(statusEl).textContent = ''; };
+            return r;
+        }
+
         if (SR) {
-            recognition = new SR();
-            recognition.continuous = false;
-            recognition.interimResults = true;
-            recognition.lang = speechLang;
-            recognition.onstart = () => { listening = true; document.getElementById('micBtn').classList.add('listening'); document.getElementById('micStatus').textContent = '🎙️ Listening — speak now…'; };
-            recognition.onresult = e => { let t = ''; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; document.getElementById('inputText').value = t; };
-            recognition.onerror = e => { document.getElementById('micStatus').textContent = 'Mic error: ' + e.error; };
-            recognition.onend = () => { listening = false; document.getElementById('micBtn').classList.remove('listening'); if (!document.getElementById('micStatus').textContent.startsWith('Mic error')) document.getElementById('micStatus').textContent = document.getElementById('inputText').value ? 'Captured. Edit if needed, then Predict.' : ''; };
-            document.getElementById('micBtn').addEventListener('click', () => { if (listening) recognition.stop(); else { document.getElementById('inputText').value = ''; recognition.start(); } });
+            recognition = makeSR(t => document.getElementById('inputText').value = t, 'micStatus');
+            document.getElementById('micBtn').addEventListener('click', () => {
+                if (listening) { recognition.stop(); listening = false; document.getElementById('micBtn').classList.remove('listening'); }
+                else { document.getElementById('inputText').value = ''; recognition.lang = document.getElementById('speechLangSel').value; recognition.start(); listening = true; document.getElementById('micBtn').classList.add('listening'); }
+            });
+            // Translator mic
+            let transRec = null;
+            document.getElementById('transMicBtn').addEventListener('click', () => {
+                if (!transRec) transRec = makeSR(t => document.getElementById('srcText').value = t, 'transStatus');
+                if (transMicListening) { transRec.stop(); transMicListening = false; document.getElementById('transMicBtn').classList.remove('listening'); }
+                else { document.getElementById('srcText').value = ''; transRec.lang = document.getElementById('speechLangSel').value; transRec.start(); transMicListening = true; document.getElementById('transMicBtn').classList.add('listening'); }
+            });
         } else {
-            document.getElementById('micBtn').disabled = true; document.getElementById('micBtn').style.opacity = .4;
+            ['micBtn', 'transMicBtn'].forEach(id => { const b = document.getElementById(id); if (b) { b.disabled = true; b.style.opacity = .4; } });
             document.getElementById('micStatus').textContent = 'Speech recognition not supported. Use Chrome or Edge.';
         }
 
-        function updateSpeechLang() {
-            speechLang = document.getElementById('langSelect').value;
-            if (recognition) recognition.lang = speechLang;
-        }
+        function updateSpeechLang() { if (recognition) recognition.lang = document.getElementById('speechLangSel').value; }
 
-        /* ====== TTS (Speak Result) ====== */
+        /* ════════════════════════════════
+           TTS
+           ════════════════════════════════ */
         let speaking = false;
+        function tts(text, onEnd) {
+            speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.rate = parseFloat(document.getElementById('ttsRate')?.value || 1);
+            if (onEnd) u.onend = onEnd;
+            speechSynthesis.speak(u);
+        }
         function speakResult() {
             if (!lastResult) return;
-            if (speaking) { speechSynthesis.cancel(); speaking = false; document.getElementById('speakBtn').classList.remove('speaking'); document.getElementById('speakBtn').textContent = '🔊 Speak Result'; return; }
+            const btn = document.getElementById('speakBtn');
+            if (speaking) { speechSynthesis.cancel(); speaking = false; btn.classList.remove('active-state'); btn.textContent = '🔊 Speak'; return; }
             const { language, sentiment, sarcasm, confidence } = lastResult;
-            const verdict = sarcasm ? 'Sarcastic' : 'Not sarcastic';
-            const text = `Language: ${language}. Sentiment: ${sentiment.replace(/[^\w\s]/g, '')}. Result: ${verdict}. Confidence: ${confidence.toFixed ? confidence.toFixed(0) : confidence} percent.`;
-            const utt = new SpeechSynthesisUtterance(text);
-            utt.rate = parseFloat(document.getElementById('ttsRate').value) || 1;
-            utt.onstart = () => { speaking = true; document.getElementById('speakBtn').classList.add('speaking'); document.getElementById('speakBtn').textContent = '⏹ Stop'; };
-            utt.onend = () => { speaking = false; document.getElementById('speakBtn').classList.remove('speaking'); document.getElementById('speakBtn').textContent = '🔊 Speak Result'; };
-            speechSynthesis.speak(utt);
+            const text = `Language: ${language}. Sentiment: ${sentiment.replace(/[^\w\s]/g, '')}. Result: ${sarcasm ? 'Sarcastic' : 'Not sarcastic'}. Confidence: ${(+confidence).toFixed(0)} percent.`;
+            speaking = true; btn.classList.add('active-state'); btn.textContent = '⏹ Stop';
+            tts(text, () => { speaking = false; btn.classList.remove('active-state'); btn.textContent = '🔊 Speak'; });
+        }
+        function speakTranslation() {
+            const t = document.getElementById('tgtText').value;
+            if (t) tts(t);
         }
 
-        /* ====== Predict ====== */
-        async function doPredict() {
-            const text = document.getElementById('inputText').value.trim();
+        /* ════════════════════════════════
+           PREDICT
+           ════════════════════════════════ */
+        async function doPredict(customText) {
+            const text = customText || document.getElementById('inputText').value.trim();
             if (!text) { document.getElementById('resultBlock').innerHTML = '<p class="error-msg">Please enter or speak some text first.</p>'; return; }
             const btn = document.getElementById('predictBtn');
             btn.disabled = true; btn.textContent = 'Analyzing…';
@@ -659,32 +1013,27 @@
                     renderResult(data);
                     renderChart(data.plotData);
                     updateStatCards(data);
-                    loadHistory();
-                    if (data.trendAlert || (data.sarcasm && data.confidence >= (parseInt(document.getElementById('alertThreshold').value) || 80))) {
-                        triggerAlert(text, data.confidence);
-                    }
+                    await loadHistory();
+                    const threshold = parseInt(document.getElementById('alertThreshold')?.value || 80);
+                    if (data.sarcasm && data.confidence >= threshold) triggerAlert(text, data.confidence);
                     document.getElementById('speakBtn').style.display = 'flex';
-                    if (document.getElementById('autoSpeak').checked) speakResult();
-                } else {
-                    document.getElementById('resultBlock').innerHTML = `<p class="error-msg">${data.error || 'Server error'}</p>`;
-                }
+                    if (settings.autoSpeak) speakResult();
+                } else { document.getElementById('resultBlock').innerHTML = `<p class="error-msg">${data.error || 'Server error'}</p>`; }
             } catch (e) { document.getElementById('resultBlock').innerHTML = `<p class="error-msg">${e}</p>`; }
             finally { btn.disabled = false; btn.textContent = 'Predict'; }
         }
 
-        function renderResult(data) {
-            const { language, sentiment, sarcasm, confidence, trendAlert } = data;
-            const cls = sarcasm ? 'sarcastic' : 'not-sarcastic';
-            const lbl = sarcasm ? '😏 Sarcastic' : '🙂 Not Sarcastic';
+        function renderResult(d) {
+            const cls = d.sarcasm ? 'sarcastic' : 'not-sarcastic';
+            const lbl = d.sarcasm ? '😏 Sarcastic' : '🙂 Not Sarcastic';
             document.getElementById('resultBlock').innerHTML = `
-    <div class="result-row"><span class="k">Language</span><span class="v">${language}</span></div>
-    <div class="result-row"><span class="k">Sentiment</span><span class="v">${sentiment}</span></div>
+    <div class="result-row"><span class="k">Language</span><span class="v">${d.language}</span></div>
+    <div class="result-row"><span class="k">Sentiment</span><span class="v">${d.sentiment}</span></div>
     <div class="result-row"><span class="k">Result</span><span class="tag ${cls}">${lbl}</span></div>
-    <div class="result-row"><span class="k">Confidence</span><span class="v">${(+confidence).toFixed(2)}%</span></div>
-    ${trendAlert ? `<div class="result-row"><span class="k">⚠️ Alert</span><span style="color:var(--bad);font-weight:700">High-confidence sarcasm!</span></div>` : ''}
+    <div class="result-row"><span class="k">Confidence</span><span class="v">${(+d.confidence).toFixed(2)}%</span></div>
+    ${d.trendAlert ? `<div class="result-row"><span class="k">⚠️ Alert</span><span style="color:var(--bad);font-weight:700">High-confidence sarcasm!</span></div>` : ''}
   `;
         }
-
         function renderChart(pd) {
             if (!pd) return;
             Plotly.newPlot('chart', [{
@@ -696,40 +1045,142 @@
                     font: { color: '#2B2118', family: 'Inter' }
                 }, { responsive: true, displayModeBar: false });
         }
-
-        function updateStatCards(data) {
-            const acc = data.accuracy || 0;
+        function updateStatCards(d) {
+            const acc = d.accuracy || 0;
             document.getElementById('statAccuracy').textContent = acc + '%';
             document.getElementById('accuracyBar').style.width = Math.min(acc, 100) + '%';
             document.getElementById('ringNum').textContent = Math.round(acc) + '%';
             document.getElementById('accuracyRing').style.setProperty('--pct', Math.round(acc));
         }
+        function sendToTranslator() {
+            const t = document.getElementById('inputText').value.trim();
+            if (t) document.getElementById('srcText').value = t;
+            nav('translate');
+        }
 
-        /* ====== Alerts ====== */
+        /* ════════════════════════════════
+           TRANSLATOR
+           ════════════════════════════════ */
+        function updateCharCount() {
+            const len = document.getElementById('srcText').value.length;
+            document.getElementById('charCount').textContent = `${len} / 2000`;
+        }
+
+        async function doTranslate() {
+            const text = document.getElementById('srcText').value.trim();
+            if (!text) return;
+            let src = document.getElementById('srcLang').value;
+            const tgt = document.getElementById('tgtLang').value;
+            document.getElementById('transStatus').textContent = 'Translating…';
+            document.getElementById('tgtText').value = '';
+            document.getElementById('detectBadge').style.display = 'none';
+            try {
+                const langPair = src === 'auto' ? `${tgt}` : `${src}|${tgt}`;
+                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${src === 'auto' ? 'en' : src}|${tgt}`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+                if (data.responseStatus === 200) {
+                    const translated = data.responseData.translatedText;
+                    document.getElementById('tgtText').value = translated;
+                    document.getElementById('transStatus').textContent = '✅ Translated successfully';
+                    // detect badge
+                    if (src === 'auto' && data.responseData.detectedLanguage) {
+                        document.getElementById('detectedLang').textContent = data.responseData.detectedLanguage;
+                        document.getElementById('detectBadge').style.display = 'inline-flex';
+                    }
+                    // save history
+                    const entry = { time: new Date().toLocaleTimeString(), src: text, tgt: translated, srcLang: src === 'auto' ? 'auto' : getFlag(src) + ' ' + src.toUpperCase(), tgtLang: getFlag(tgt) + ' ' + tgt.toUpperCase() };
+                    transHistory.unshift(entry);
+                    renderTransHistory();
+                } else {
+                    document.getElementById('transStatus').textContent = 'Translation failed: ' + data.responseDetails;
+                }
+            } catch (e) {
+                document.getElementById('transStatus').textContent = 'Network error: ' + e.message;
+            }
+        }
+
+        function getFlag(code) {
+            const flags = { en: '🇺🇸', hi: '🇮🇳', mr: '🟠', es: '🇪🇸', fr: '🇫🇷', de: '🇩🇪', pt: '🇧🇷', it: '🇮🇹', ru: '🇷🇺', ja: '🇯🇵', ko: '🇰🇷', zh: '🇨🇳', ar: '🇸🇦', bn: '🇧🇩', ta: '🇮🇳', te: '🇮🇳', kn: '🇮🇳', gu: '🇮🇳', pa: '🇮🇳', ur: '🇵🇰', tr: '🇹🇷', nl: '🇳🇱' };
+            return flags[code] || '🌐';
+        }
+
+        function swapLangs() {
+            const srcEl = document.getElementById('srcLang'), tgtEl = document.getElementById('tgtLang');
+            const srcV = srcEl.value, tgtV = tgtEl.value;
+            const srcTx = document.getElementById('srcText').value, tgtTx = document.getElementById('tgtText').value;
+            if (srcV !== 'auto') srcEl.value = tgtV;
+            tgtEl.value = srcV === 'auto' ? 'en' : srcV;
+            document.getElementById('srcText').value = tgtTx;
+            document.getElementById('tgtText').value = srcTx;
+            updateCharCount();
+        }
+
+        function clearTranslator() {
+            document.getElementById('srcText').value = '';
+            document.getElementById('tgtText').value = '';
+            document.getElementById('transStatus').textContent = '';
+            document.getElementById('detectBadge').style.display = 'none';
+            updateCharCount();
+        }
+
+        function copyTranslation() {
+            const t = document.getElementById('tgtText').value;
+            if (!t) return;
+            navigator.clipboard.writeText(t).then(() => { document.getElementById('transStatus').textContent = '📋 Copied!'; setTimeout(() => document.getElementById('transStatus').textContent = '', 1500); });
+        }
+
+        function analyzeTranslation() {
+            const t = document.getElementById('tgtText').value.trim();
+            if (!t) return;
+            document.getElementById('inputText').value = t;
+            nav('dashboard');
+            doPredict(t);
+        }
+
+        function quickTranslate(text) {
+            document.getElementById('srcText').value = text;
+            updateCharCount();
+            doTranslate();
+        }
+
+        function renderTransHistory() {
+            const el = document.getElementById('transHistory');
+            if (!transHistory.length) { el.innerHTML = '<div class="placeholder-msg">No translations yet.</div>'; return; }
+            el.innerHTML = transHistory.slice(0, 10).map(h => `
+    <div class="history-item">
+      <span class="txt" title="${escHtml(h.src)}">${escHtml(h.src)}</span>
+      <span class="tag neutral-tag" style="background:var(--blue-soft);color:var(--blue)">${h.srcLang} → ${h.tgtLang}</span>
+      <span class="meta">${h.time}</span>
+    </div>`).join('');
+        }
+
+        /* ════════════════════════════════
+           ALERTS
+           ════════════════════════════════ */
         function triggerAlert(text, confidence) {
             const a = { time: new Date().toLocaleTimeString(), text, confidence };
             alertsList.unshift(a);
-            document.getElementById('alertBannerText').textContent = `🚨 High-confidence sarcasm detected: "${text.slice(0, 60)}…" (${(+confidence).toFixed(0)}% confidence)`;
+            document.getElementById('alertBannerText').textContent = `🚨 High-confidence sarcasm: "${text.slice(0, 55)}…" (${(+confidence).toFixed(0)}%)`;
             document.getElementById('alertBanner').classList.add('show');
-            document.getElementById('alertBadge').textContent = alertsList.length;
-            document.getElementById('alertBadge').style.display = 'inline';
-            document.getElementById('topAlertIcon').textContent = '🔔';
+            const badge = document.getElementById('alertBadge');
+            badge.textContent = alertsList.length; badge.style.display = 'inline';
             if (document.getElementById('sec-alerts').classList.contains('active')) renderAlertsPage();
         }
-
         function dismissBanner() { document.getElementById('alertBanner').classList.remove('show'); }
         function clearAlerts() { alertsList = []; document.getElementById('alertBadge').style.display = 'none'; renderAlertsPage(); dismissBanner(); }
-
         function renderAlertsPage() {
             const el = document.getElementById('alertsList');
-            if (!alertsList.length) { el.innerHTML = '<div class="empty-state">No alerts triggered yet.<br>Alerts fire when sarcasm confidence exceeds ' + (document.getElementById('alertThreshold').value || 80) + '%.</div>'; return; }
-            el.innerHTML = alertsList.map(a => `<div class="alert-item" style="margin-bottom:10px"><div class="ai">🚨</div><div><div class="at">${a.time} · ${(+a.confidence).toFixed(0)}% confidence</div><div class="ad">${escHtml(a.text)}</div></div></div>`).join('');
+            if (!alertsList.length) { el.innerHTML = `<div class="empty-state">No alerts yet.<br>Fires when confidence ≥ ${document.getElementById('alertThreshold')?.value || 80}%.</div>`; return; }
+            el.innerHTML = alertsList.map(a => `<div class="alert-item"><div><div class="at">🕐 ${a.time} · ${(+a.confidence).toFixed(0)}% confidence</div><div class="ad">${escHtml(a.text)}</div></div></div>`).join('');
         }
 
-        /* ====== History ====== */
+        /* ════════════════════════════════
+           HISTORY
+           ════════════════════════════════ */
         async function loadHistory() {
             try {
-                const size = parseInt(document.getElementById('histPageSize').value) || 20;
+                const size = parseInt(document.getElementById('histPageSize')?.value || 20);
                 const resp = await fetch(`/history?page=1&size=${size}`);
                 const data = await resp.json();
                 allHistory = (data.records || []).slice().reverse();
@@ -747,14 +1198,13 @@
             const rate = allHistory.length ? Math.round(sarc / allHistory.length * 100) : 0;
             document.getElementById('statRate').textContent = rate + '%';
             document.getElementById('rateBar').style.width = rate + '%';
-            const langs = new Set(allHistory.map(r => r.language)).size;
-            document.getElementById('statLangs').textContent = langs;
+            document.getElementById('statLangs').textContent = new Set(allHistory.map(r => r.language)).size;
         }
 
         function renderDashHistory() {
             const el = document.getElementById('dashHistory');
             if (!allHistory.length) { el.innerHTML = '<div class="placeholder-msg">No analyses yet.</div>'; return; }
-            el.innerHTML = allHistory.slice(0, 8).map(r => `
+            el.innerHTML = allHistory.slice(0, 7).map(r => `
     <div class="history-item">
       <span class="txt" title="${escHtml(r.text)}">${escHtml(r.text)}</span>
       <span class="tag ${r.sarcasm ? 'sarcastic' : 'not-sarcastic'}">${r.sarcasm ? '😏' : '🙂'} ${(+r.confidence).toFixed(0)}%</span>
@@ -762,117 +1212,99 @@
     </div>`).join('');
         }
 
-        function renderFullHistory(filtered) {
-            const data = filtered !== undefined ? filtered : allHistory;
+        let currentFilter = 'all';
+        function setFilter(f, el) {
+            currentFilter = f;
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            filterHistory();
+        }
+
+        function filterHistory() {
+            const q = document.getElementById('histSearch').value.toLowerCase();
+            let data = allHistory;
+            if (currentFilter === 'sarcastic') data = data.filter(r => r.sarcasm);
+            else if (currentFilter === 'not') data = data.filter(r => !r.sarcasm);
+            else if (currentFilter === 'english') data = data.filter(r => r.language === 'English');
+            else if (currentFilter === 'hindi') data = data.filter(r => r.language.includes('Hindi'));
+            else if (currentFilter === 'marathi') data = data.filter(r => r.language === 'Marathi');
+            if (q) data = data.filter(r => r.text.toLowerCase().includes(q) || (r.language || '').toLowerCase().includes(q) || (r.sentiment || '').toLowerCase().includes(q));
+            renderFullHistory(data);
+        }
+
+        function renderFullHistory(data) {
+            const d = data || allHistory;
             const el = document.getElementById('fullHistoryList');
-            if (!data.length) { el.innerHTML = '<div class="placeholder-msg">No matching records.</div>'; return; }
-            el.innerHTML = data.map(r => `
+            if (!d.length) { el.innerHTML = '<div class="placeholder-msg">No matching records.</div>'; return; }
+            el.innerHTML = d.map(r => `
     <div class="history-item">
       <span class="txt" title="${escHtml(r.text)}">${escHtml(r.text)}</span>
       <span class="tag ${r.sarcasm ? 'sarcastic' : 'not-sarcastic'}">${r.sarcasm ? '😏 Sarcastic' : '🙂 Not Sarcastic'}</span>
       <span class="meta">${(+r.confidence).toFixed(0)}%</span>
       <span class="meta">${r.language}</span>
-      <span class="meta">${r.sentiment ? r.sentiment.replace(/[^\w\s]/g, '').trim() : ''}</span>
     </div>`).join('');
         }
 
-        function filterHistory() {
-            const q = document.getElementById('histSearch').value.toLowerCase();
-            if (!q) { renderFullHistory(); return; }
-            renderFullHistory(allHistory.filter(r =>
-                r.text.toLowerCase().includes(q) ||
-                r.language.toLowerCase().includes(q) ||
-                (r.sentiment || '').toLowerCase().includes(q)
-            ));
+        function exportCSV() {
+            if (!allHistory.length) return;
+            const header = 'Timestamp,Text,Language,Sentiment,Sarcastic,Confidence\n';
+            const rows = allHistory.map(r => [r.timestamp || '', `"${(r.text || '').replace(/"/g, '""')}"`, r.language, r.sentiment, r.sarcasm ? 'Yes' : 'No', r.confidence].join(',')).join('\n');
+            const blob = new Blob([header + rows], { type: 'text/csv' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'sarcasm_history.csv'; a.click();
         }
 
-        function clearHistory() { document.getElementById('histSearch').value = ''; renderFullHistory(); }
-
-        /* ====== Language Mix page ====== */
+        /* ════════════════════════════════
+           LANGUAGE MIX
+           ════════════════════════════════ */
+        const FLAGS = { English: '🇺🇸', 'Hindi / Hinglish': '🇮🇳', Marathi: '🟠' };
         function renderLanguagePage() {
-            const counts = {};
-            const sarc = {};
-            allHistory.forEach(r => {
-                counts[r.language] = (counts[r.language] || 0) + 1;
-                if (r.sarcasm) sarc[r.language] = (sarc[r.language] || 0) + 1;
-            });
-            const langs = Object.keys(counts);
-            const total = allHistory.length;
-
-            const flagMap = { 'English': '🇺🇸', 'Hindi / Hinglish': '🇮🇳', 'Marathi': '🟠' };
+            const counts = {}, sarc = {};
+            allHistory.forEach(r => { counts[r.language] = (counts[r.language] || 0) + 1; if (r.sarcasm) sarc[r.language] = (sarc[r.language] || 0) + 1; });
+            const langs = Object.keys(counts), total = allHistory.length;
             const grid = document.getElementById('langGrid');
             if (!langs.length) { grid.innerHTML = '<div class="placeholder-msg">Run some predictions first.</div>'; return; }
-
-            grid.innerHTML = langs.map(l => `
-    <div class="lang-card">
-      <div class="flag">${flagMap[l] || '🌐'}</div>
-      <div class="lang-name">${l}</div>
-      <div class="lang-count">${counts[l]}</div>
-      <div class="lang-pct">${total ? Math.round(counts[l] / total * 100) : 0}% of total</div>
-    </div>`).join('');
-
-            Plotly.newPlot('langChart', [{
-                values: langs.map(l => counts[l]), labels: langs, type: 'pie', hole: .45,
-                marker: { colors: ['#FF6A3D', '#3B82F6', '#F5A623', '#2BB673'] }, textinfo: 'label+percent'
-            }],
-                { showlegend: false, margin: { t: 10, b: 10, l: 10, r: 10 }, paper_bgcolor: 'transparent', font: { color: '#2B2118', family: 'Inter' } },
-                { responsive: true, displayModeBar: false });
-
-            Plotly.newPlot('langSarcasmChart', [{
-                x: langs, y: langs.map(l => sarc[l] || 0), type: 'bar', name: 'Sarcastic',
-                marker: { color: '#FF6A3D' }
-            }, {
-                x: langs, y: langs.map(l => (counts[l] || 0) - (sarc[l] || 0)), type: 'bar', name: 'Not Sarcastic',
-                marker: { color: '#2BB673' }
-            }],
-                {
-                    barmode: 'stack', paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
-                    font: { color: '#2B2118', family: 'Inter' }, margin: { t: 10, b: 30, l: 30, r: 10 },
-                    legend: { orientation: 'h', y: 1.1 }
-                },
-                { responsive: true, displayModeBar: false });
+            grid.innerHTML = langs.map(l => `<div class="lang-card"><div class="flag">${FLAGS[l] || '🌐'}</div><div class="lang-name">${l}</div><div class="lang-count">${counts[l]}</div><div class="lang-pct">${total ? Math.round(counts[l] / total * 100) : 0}% of total</div></div>`).join('');
+            Plotly.newPlot('langChart', [{ values: langs.map(l => counts[l]), labels: langs, type: 'pie', hole: .45, marker: { colors: ['#FF6A3D', '#3B82F6', '#F5A623', '#2BB673', '#8B5CF6'] }, textinfo: 'label+percent' }], { showlegend: false, margin: { t: 10, b: 10, l: 10, r: 10 }, paper_bgcolor: 'transparent', font: { color: '#2B2118', family: 'Inter' } }, { responsive: true, displayModeBar: false });
+            Plotly.newPlot('langSarcasmChart', [{ x: langs, y: langs.map(l => sarc[l] || 0), type: 'bar', name: 'Sarcastic', marker: { color: '#FF6A3D' } }, { x: langs, y: langs.map(l => (counts[l] || 0) - (sarc[l] || 0)), type: 'bar', name: 'Not Sarcastic', marker: { color: '#2BB673' } }], { barmode: 'stack', paper_bgcolor: 'transparent', plot_bgcolor: 'transparent', font: { color: '#2B2118', family: 'Inter' }, margin: { t: 10, b: 30, l: 30, r: 10 }, legend: { orientation: 'h', y: 1.1 } }, { responsive: true, displayModeBar: false });
         }
 
-        /* ====== Sentiment page ====== */
+        /* ════════════════════════════════
+           SENTIMENT
+           ════════════════════════════════ */
         function renderSentimentPage() {
-            const cats = { pos: 0, neg: 0, neu: 0 };
-            const sarByS = { pos: 0, neg: 0, neu: 0 };
-            allHistory.forEach(r => {
-                const s = (r.sentiment || '').toLowerCase();
-                const key = s.includes('positive') ? 'pos' : s.includes('negative') ? 'neg' : 'neu';
-                cats[key]++;
-                if (r.sarcasm) sarByS[key]++;
-            });
+            const cats = { pos: 0, neg: 0, neu: 0 }, sarByS = { pos: 0, neg: 0, neu: 0 };
+            allHistory.forEach(r => { const s = (r.sentiment || '').toLowerCase(); const k = s.includes('positive') ? 'pos' : s.includes('negative') ? 'neg' : 'neu'; cats[k]++; if (r.sarcasm) sarByS[k]++; });
             document.getElementById('sentPos').textContent = cats.pos;
             document.getElementById('sentNeg').textContent = cats.neg;
             document.getElementById('sentNeu').textContent = cats.neu;
-
-            Plotly.newPlot('sentChart', [{
-                values: [cats.pos, cats.neg, cats.neu], labels: ['Positive', 'Negative', 'Neutral'],
-                type: 'pie', hole: .5, marker: { colors: ['#2BB673', '#E84C3D', '#F5A623'] }, textinfo: 'label+percent'
-            }],
-                { showlegend: false, margin: { t: 10, b: 10, l: 10, r: 10 }, paper_bgcolor: 'transparent', font: { color: '#2B2118', family: 'Inter' } },
-                { responsive: true, displayModeBar: false });
-
-            Plotly.newPlot('sentSarcasmChart', [{
-                x: ['Positive', 'Negative', 'Neutral'], y: [sarByS.pos, sarByS.neg, sarByS.neu],
-                type: 'bar', name: 'Sarcastic', marker: { color: '#FF6A3D' }
-            }, {
-                x: ['Positive', 'Negative', 'Neutral'], y: [cats.pos - sarByS.pos, cats.neg - sarByS.neg, cats.neu - sarByS.neu],
-                type: 'bar', name: 'Not Sarcastic', marker: { color: '#2BB673' }
-            }],
-                {
-                    barmode: 'group', paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
-                    font: { color: '#2B2118', family: 'Inter' }, margin: { t: 10, b: 30, l: 30, r: 10 },
-                    legend: { orientation: 'h', y: 1.1 }
-                },
-                { responsive: true, displayModeBar: false });
+            Plotly.newPlot('sentChart', [{ values: [cats.pos, cats.neg, cats.neu], labels: ['Positive', 'Negative', 'Neutral'], type: 'pie', hole: .5, marker: { colors: ['#2BB673', '#E84C3D', '#F5A623'] }, textinfo: 'label+percent' }], { showlegend: false, margin: { t: 10, b: 10, l: 10, r: 10 }, paper_bgcolor: 'transparent', font: { color: '#2B2118', family: 'Inter' } }, { responsive: true, displayModeBar: false });
+            Plotly.newPlot('sentSarcasmChart', [{ x: ['Positive', 'Negative', 'Neutral'], y: [sarByS.pos, sarByS.neg, sarByS.neu], type: 'bar', name: 'Sarcastic', marker: { color: '#FF6A3D' } }, { x: ['Positive', 'Negative', 'Neutral'], y: [cats.pos - sarByS.pos, cats.neg - sarByS.neg, cats.neu - sarByS.neu], type: 'bar', name: 'Not Sarcastic', marker: { color: '#2BB673' } }], { barmode: 'group', paper_bgcolor: 'transparent', plot_bgcolor: 'transparent', font: { color: '#2B2118', family: 'Inter' }, margin: { t: 10, b: 30, l: 30, r: 10 }, legend: { orientation: 'h', y: 1.1 } }, { responsive: true, displayModeBar: false });
         }
 
-        /* ====== Util ====== */
+        /* ════════════════════════════════
+           SETTINGS TOGGLES
+           ════════════════════════════════ */
+        function toggleSetting(btnId, key) {
+            settings[key] = !settings[key];
+            localStorage.setItem('ss_settings', JSON.stringify(settings));
+            document.getElementById(btnId).classList.toggle('on', !!settings[key]);
+        }
+        function applySettings() {
+            if (settings.autoSpeak) document.getElementById('autoSpeakToggle')?.classList.add('on');
+            if (settings.autoTrans) document.getElementById('autoTransToggle')?.classList.add('on');
+            if (settings.speechLang) { const el = document.getElementById('speechLangSel'); if (el) el.value = settings.speechLang; }
+        }
+
+        /* ════════════════════════════════
+           UTILS
+           ════════════════════════════════ */
         function escHtml(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
 
-        /* ====== Init ====== */
+        /* ════════════════════════════════
+           INIT
+           ════════════════════════════════ */
+        loadProfile();
+        applySettings();
         loadHistory();
     </script>
 </body>

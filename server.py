@@ -20,7 +20,7 @@ from textblob import TextBlob
 # ---------------------------------------------------------------------------
 # Configuration & Globals
 # ---------------------------------------------------------------------------
-BASE_DIR = Path(__file__).parent.parent
+BASE_DIR = Path(__file__).parent
 app = Flask(
     __name__,
     static_folder=str(BASE_DIR / "static"),
