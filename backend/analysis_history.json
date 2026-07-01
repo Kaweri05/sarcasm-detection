@@ -1,0 +1,42 @@
+[
+  {
+    "timestamp": "2026-06-30T17:26:35.750895Z",
+    "text": "wow, that's great",
+    "language": "English",
+    "sentiment": "😊 Positive",
+    "sarcasm": false,
+    "confidence": 25.0
+  },
+  {
+    "timestamp": "2026-07-01T05:27:16.633343Z",
+    "text": "wow, what a flop movie.",
+    "language": "English",
+    "sentiment": "😊 Positive",
+    "sarcasm": false,
+    "confidence": 25.0
+  },
+  {
+    "timestamp": "2026-07-01T05:27:47.419277Z",
+    "text": "i hate this season",
+    "language": "English",
+    "sentiment": "😔 Negative",
+    "sarcasm": false,
+    "confidence": 25.0
+  },
+  {
+    "timestamp": "2026-07-01T05:28:30.223265Z",
+    "text": "you are very fat 😂",
+    "language": "English",
+    "sentiment": "😊 Positive",
+    "sarcasm": false,
+    "confidence": 25.0
+  },
+  {
+    "timestamp": "2026-07-01T05:29:53.573096Z",
+    "text": "I hate Monday.",
+    "language": "English",
+    "sentiment": "😔 Negative",
+    "sarcasm": false,
+    "confidence": 25.0
+  }
+]

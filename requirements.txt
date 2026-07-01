@@ -1,11 +1,6 @@
-streamlit
+Flask
 tensorflow==2.15.0
-numpy
 pandas
-scikit-learn
-nltk
+numpy
+plotly   # only needed server‑side for optional saving; front‑end uses CDN
 textblob
-langdetect
-protobuf==4.25.3
-matplotlib
-seaborn

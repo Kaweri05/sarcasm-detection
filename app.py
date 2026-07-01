@@ -1,8 +1,18 @@
 import streamlit as st
+
+import os
+
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+local_css("style.css")
 import json
+import pandas as pd
+import plotly.express as px
 import numpy as np
 
-from tensorflow.keras.preprocessing.text import Tokenizer
+import tensorflow as tf
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, LSTM, Dense
