@@ -380,7 +380,7 @@ Open browser at http://localhost:5000
 
 | Platform | Status | Link |
 |---|---|---|
-| Hugging Face Spaces | Live | https://huggingface.co/spaces/cleve05/Sentify |
+| Hugging Face Spaces | Live | [https://huggingface.co/spaces/cleve05/Sentify](https://huggingface.co/spaces/cleve05/Sentify) |
 | GitHub | Source Code | https://github.com/Kaweri05/sarcasm-detection |
 | Kaggle | Notebook | https://www.kaggle.com |
 
