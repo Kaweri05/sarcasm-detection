@@ -1,3 +1,13 @@
+---
+title: Sentify
+emoji: 😏
+colorFrom: orange
+colorTo: red
+sdk: docker
+app_file: server.py
+pinned: false
+---
+
 <div align="center">
 
 # 😏 Sentify
