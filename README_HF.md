@@ -1,10 +1,8 @@
 ---
-colorFrom: orange    ← change to: colorFrom: yellow
-colorTo: red         ← change to: colorTo: red
 title: Sentify
 emoji: 😏
-colorFrom: orange
-colorTo: red
+colorFrom: orange    ← change to: colorFrom: yellow
+colorTo: red         ← change to: colorTo: red
 sdk: docker
 app_file: server.py
 pinned: false
