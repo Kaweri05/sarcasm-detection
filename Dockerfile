@@ -2,7 +2,6 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
@@ -13,12 +12,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Download NLTK data
 RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('averaged_perceptron_tagger')"
 
-# Download TextBlob corpora
-RUN python -c "from textblob import download_corpora; download_corpora()"
+# Download TextBlob corpora (correct command)
+RUN python -m textblob.download_corpora
 
 COPY . .
 
-# Create backend folder if not exists
+# Create backend folder and files
 RUN mkdir -p backend && \
     echo '{"accuracy": 78.34}' > backend/model_metrics.json && \
     echo '[]' > backend/analysis_history.json
