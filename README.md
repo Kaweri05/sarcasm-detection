@@ -1,262 +1,415 @@
+<div align="center">
 
-# 🤖 Multilingual Sarcasm Detection 
+# 😏 Sentify
+### Multilingual Sarcasm Detection Dashboard
+
+[![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-3.1.3-black?logo=flask)](https://flask.palletsprojects.com)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.15.0-orange?logo=tensorflow)](https://tensorflow.org)
+[![HuggingFace](https://img.shields.io/badge/🤗%20HuggingFace-Spaces-yellow)](https://huggingface.co/spaces/Kaweri05/sentify)
+[![GitHub](https://img.shields.io/badge/GitHub-Kaweri05-black?logo=github)](https://github.com/Kaweri05/sarcasm-detection)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+
+**Detect sarcasm, analyze sentiment, and translate text across 22+ languages — on any device.**
+
+🔗 **Live Demo:** [huggingface.co/spaces/Kaweri05/sentify](https://huggingface.co/spaces/Kaweri05/sentify)
+📁 **GitHub:** [github.com/Kaweri05/sarcasm-detection](https://github.com/Kaweri05/sarcasm-detection)
+
+![Sentify Dashboard](output.png)
+
+</div>
+
+---
 
 ## 📌 Project Overview
 
-This project is a **Multilingual Sarcasm Detection System** built using **Natural Language Processing (NLP)** and **Deep Learning (LSTM)**. It detects whether a sentence is **sarcastic or non-sarcastic**, identifies the **language**, performs **sentiment analysis**, and shows a **confidence percentage** for predictions.
+**Sentify** is a full-stack AI-powered web application that detects sarcasm in text using a deep learning LSTM model. It supports multiple languages including English, Hindi, Marathi, and Hinglish, with real-time translation across 22+ languages, sentiment analysis, voice input, and an analytics dashboard — all accessible on mobile and desktop.
 
-Unlike traditional sarcasm detection systems that mainly support English, this project aims to support **multiple languages, especially Indian languages such as Hindi and Marathi**.
+---
+
+## 🗺️ Block Diagrams
+
+### 1️⃣ System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        SENTIFY SYSTEM                        │
+├─────────────────┬───────────────────┬───────────────────────┤
+│   FRONTEND      │     BACKEND       │      DATA LAYER       │
+│   (Browser)     │     (Flask)       │                       │
+│                 │                   │                       │
+│  HTML/CSS/JS ──►│  server.py        │  sarcasm.json         │
+│  Plotly Charts  │  ├── /predict     │  (26,000+ headlines)  │
+│  Web Speech API │  ├── /history     │                       │
+│  MyMemory API   │  └── /            │  analysis_history.json│
+│                 │                   │  (prediction logs)    │
+│  Mobile UI      │  TensorFlow LSTM  │                       │
+│  Bottom Nav     │  TextBlob NLP     │  model_metrics.json   │
+│  Responsive     │  Word-list Lang   │  (accuracy score)     │
+└─────────────────┴───────────────────┴───────────────────────┘
+```
+
+---
+
+### 2️⃣ ML Model Pipeline
+
+```
+  Raw Text Input
+       │
+       ▼
+┌─────────────┐
+│  Tokenizer  │  ← vocab_size=10,000 · oov_token="<OOV>"
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│   Padding   │  ← maxlen=40 · post-padding
+└──────┬──────┘
+       │
+       ▼
+┌─────────────────┐
+│ Embedding Layer │  ← 10,000 vocab → 64-dim dense vectors
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  LSTM (64 units)│  ← captures long-range sequence context
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Dense · ReLU 24 │  ← feature extraction
+└────────┬────────┘
+         │
+         ▼
+┌──────────────────┐
+│ Dense · Sigmoid 1│  ← binary output: 0=not sarcastic, 1=sarcastic
+└────────┬─────────┘
+         │
+         ▼
+  Confidence Score (0–100%)
+```
+
+---
+
+### 3️⃣ Prediction Request Flow
+
+```
+  Browser                    Flask (server.py)              Storage
+    │                               │                          │
+    │── POST /predict ─────────────►│                          │
+    │   { "text": "..." }           │                          │
+    │                               │── detect_language()      │
+    │                               │── analyse_sentiment()    │
+    │                               │── predict_sarcasm()      │
+    │                               │                          │
+    │                               │── append_history() ─────►│
+    │                               │                  analysis_history.json
+    │◄── JSON Response ─────────────│                          │
+    │  {                            │                          │
+    │    language,                  │                          │
+    │    sentiment,                 │                          │
+    │    sarcasm: true/false,       │                          │
+    │    confidence: 75.0,          │                          │
+    │    trendAlert: false,         │                          │
+    │    plotData: {...}            │                          │
+    │  }                            │                          │
+    │                               │                          │
+    │── Render result + chart       │                          │
+    │── Trigger alert if conf>80%   │                          │
+```
+
+---
+
+### 4️⃣ Translation Flow
+
+```
+  User Types / Speaks Text
+           │
+           ▼
+  ┌─────────────────┐
+  │  Source Language│  ← Auto-detect or manual select
+  │  Selector       │     (22 languages supported)
+  └────────┬────────┘
+           │
+           ▼
+  ┌─────────────────────────────┐
+  │  MyMemory Free API          │
+  │  api.mymemory.translated.net│
+  │  GET ?q={text}&langpair=    │
+  │      {src}|{tgt}            │
+  └────────┬────────────────────┘
+           │
+           ▼
+  ┌─────────────────┐
+  │ Translated Text │
+  │ displayed in    │
+  │ output box      │
+  └────────┬────────┘
+           │
+     ┌─────┴──────┐
+     ▼            ▼
+  Copy Text    Analyze for
+  to clipboard   Sarcasm
+                   │
+                   ▼
+            POST /predict
+            (with translated text)
+```
+
+---
+
+### 5️⃣ Language & Sentiment Analytics Flow
+
+```
+  analysis_history.json (all saved predictions)
+              │
+              ▼
+  ┌───────────────────────┐
+  │   Parse History Data  │
+  └──────────┬────────────┘
+             │
+    ┌────────┼────────┐
+    ▼        ▼        ▼
+┌────────┐ ┌──────┐ ┌──────────┐
+│Language│ │Senti-│ │ Sarcasm  │
+│ Mix    │ │ment  │ │  Rate    │
+│ Page   │ │ Page │ │ Stats    │
+└───┬────┘ └──┬───┘ └────┬─────┘
+    │         │           │
+    ▼         ▼           ▼
+ Donut     Pie Chart   Bar Chart
+ Chart +   Pos/Neg/Neu  by Language
+ Bar Chart  × Sarcasm
+```
+
+---
+
+### 6️⃣ Alert System Flow
+
+```
+  Prediction Result
+         │
+         ▼
+  ┌─────────────────────────┐
+  │  Is sarcasm == true?    │
+  └────────┬────────────────┘
+           │
+      YES  │   NO
+       ┌───┘    └──► No alert
+       ▼
+  ┌─────────────────────────┐
+  │  confidence >= threshold│  ← default 80% (configurable)
+  │  (from Settings page)   │
+  └────────┬────────────────┘
+           │
+      YES  │   NO
+       ┌───┘    └──► No alert
+       ▼
+  ┌─────────────────────────┐
+  │  triggerAlert()         │
+  │  ├── Show red banner    │
+  │  ├── Increment badge    │
+  │  └── Log to Alerts page │
+  └─────────────────────────┘
+```
+
+---
+
+## 📱 App Instructions (User Flowchart)
+
+```
+                    ┌──────────────┐
+                    │  Open Sentify│
+                    │  in Browser  │
+                    └──────┬───────┘
+                           │
+                           ▼
+                    ┌──────────────┐
+                    │  Dashboard   │◄──────────────────┐
+                    │  Home Page   │                   │
+                    └──────┬───────┘                   │
+                           │                           │
+           ┌───────────────┼────────────────┐          │
+           ▼               ▼                ▼          │
+    ┌─────────────┐ ┌────────────┐  ┌─────────────┐   │
+    │ Type text   │ │ Tap 🎙️ Mic│  │ Tap 🌐      │   │
+    │ in box      │ │ and Speak  │  │ Translator  │   │
+    └──────┬──────┘ └─────┬──────┘  └──────┬──────┘   │
+           │              │                │           │
+           └──────┬───────┘                │           │
+                  ▼                        ▼           │
+           ┌─────────────┐         ┌─────────────┐    │
+           │ Click       │         │ Select      │    │
+           │ "Predict"   │         │ Languages   │    │
+           └──────┬──────┘         │ Click Trans-│    │
+                  │                │ late        │    │
+                  ▼                └──────┬──────┘    │
+           ┌─────────────┐                │           │
+           │ View Result │                ▼           │
+           │ • Language  │         ┌─────────────┐    │
+           │ • Sentiment │         │ View Trans- │    │
+           │ • Sarcastic?│         │ lation      │    │
+           │ • Confidence│         │             │    │
+           └──────┬──────┘         │ Click       │    │
+                  │                │ "Analyze    │    │
+           ┌──────┴──────┐         │ for Sarcasm"│    │
+           │             │         └──────┬──────┘    │
+           ▼             ▼                │           │
+    ┌────────────┐ ┌──────────┐           └───────────┤
+    │ Confidence │ │ Click 🔊 │                       │
+    │  > 80%?    │ │ Speak    │                       │
+    └─────┬──────┘ │ Result   │                       │
+          │        └──────────┘                       │
+    YES   │   NO                                      │
+     ┌────┘   └──► Continue                           │
+     ▼                                                │
+    ┌────────────┐                                    │
+    │ 🚨 Alert  │                                    │
+    │ Banner     │                                    │
+    │ appears   │                                    │
+    └─────┬──────┘                                   │
+          │                                          │
+          ▼                                          │
+    ┌────────────┐    ┌──────────┐  ┌─────────────┐  │
+    │ View       │    │ View     │  │ View        │  │
+    │ Alerts     │    │ History  │  │ Language Mix│  │
+    │ Page 🚨    │    │ Page 🕓  │  │ Sentiment 💭│  │
+    └────────────┘    └──────────┘  └──────┬──────┘  │
+                                           │         │
+                                           └─────────┘
+```
 
 ---
 
 ## 🚀 Features
 
-✅ **Sarcasm Detection** (Sarcastic / Not Sarcastic)
-✅ **Multilingual Support** (English, Hindi, Marathi, Hinglish)
-✅ **Automatic Language Detection**
-✅ **Sentiment Analysis** (Positive / Negative / Neutral)
-✅ **Confidence Percentage Prediction**
-✅ **Interactive Web Application using Streamlit**
-✅ **Real-time Text Prediction**
+| Feature | Description |
+|---|---|
+| 😏 Sarcasm Detection | LSTM model trained on 26,000+ headlines |
+| 🌍 Multilingual | English, Hindi, Marathi, Hinglish |
+| 🌐 Translator | 22+ languages via MyMemory API |
+| 🎙️ Voice Input | Speech-to-text via Web Speech API |
+| 🔊 Text-to-Speech | Reads results aloud |
+| 📊 Analytics | Language mix, sentiment, confidence charts |
+| 🚨 Alerts | Auto-trigger on high-confidence sarcasm |
+| 📱 Mobile-first | Bottom nav, hamburger menu, responsive |
+| 📥 Export CSV | Download full prediction history |
+| 👤 Profile | Customizable user profile with badges |
+| 🌐 i18n UI | Interface in English, Hindi, Marathi, Spanish, French |
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Category             | Technology                    |
-| -------------------- | ----------------------------- |
-| Programming Language | Python                        |
-| Frontend/UI          | Streamlit                     |
-| Deep Learning        | TensorFlow / Keras            |
-| NLP                  | NLTK                          |
-| Model                | LSTM (Long Short-Term Memory) |
-| Sentiment Analysis   | TextBlob                      |
-| Language Detection   | Langdetect                    |
-| Data Processing      | NumPy, Pandas                 |
-| Visualization        | Matplotlib, Seaborn           |
-| Deployment           | Streamlit Cloud               |
-| Version Control      | Git & GitHub                  |
+| Layer | Technology |
+|---|---|
+| Language | Python 3.10 |
+| Backend | Flask 3.1.3 |
+| ML Model | TensorFlow-CPU 2.15.0 / Keras LSTM |
+| NLP | NLTK, TextBlob |
+| Translation | MyMemory Free API |
+| Frontend | HTML5, CSS3, Vanilla JavaScript |
+| Charts | Plotly.js |
+| Speech | Web Speech API (browser-native) |
+| Dataset | Sarcasm Headlines Dataset (Kaggle) |
+| Deployment | Hugging Face Spaces (Docker) |
 
 ---
 
-## 📂 Dataset Used
+## 📂 Project Structure
 
-This project uses the **Sarcasm Headlines Dataset** in JSON format.
-
-Dataset contains:
-
-* `headline`
-* `is_sarcastic`
-
-Example:
-
-```json
-{
-  "headline": "Wow! What a great day",
-  "is_sarcastic": 1
-}
+```
+sarcasm-detection/
+├── server.py                 ← Flask backend (main entry point)
+├── app.py                    ← Legacy Streamlit version
+├── requirements.txt          ← Python dependencies
+├── Dockerfile                ← Hugging Face deployment
+├── Procfile                  ← Render/Railway deployment
+├── runtime.txt               ← Python 3.10 version pin
+├── sarcasm.json              ← Dataset (26,000+ headlines)
+├── templates/
+│   └── index.html            ← Full dashboard UI
+├── static/
+│   └── style.css             ← Mobile-first styles
+└── backend/
+    ├── model_metrics.json    ← Model accuracy
+    └── analysis_history.json ← Prediction history log
 ```
 
 ---
 
-## ⚙️ How the Project Works
-
-### Step 1: User Input
-
-User enters a sentence in the Streamlit app.
-
-### Step 2: Language Detection
-
-The system automatically detects the language using **Langdetect**.
-
-### Step 3: Text Preprocessing
-
-Input text is cleaned and processed using NLP techniques:
-
-* Lowercase conversion
-* Tokenization
-* Sequence conversion
-* Padding
-
-### Step 4: Sarcasm Prediction
-
-The processed text is passed to the **LSTM model** for sarcasm prediction.
-
-### Step 5: Sentiment Analysis
-
-**TextBlob** analyzes whether the sentence is:
-
-* 🙂 Positive
-* 😞 Negative
-* 😐 Neutral
-
-### Step 6: Confidence Score
-
-The system shows confidence percentage for prediction.
-
----
-
-## 🧠 Model Architecture
-
-```text
-Input Text
-      ↓
-Text Preprocessing
-      ↓
-Tokenization
-      ↓
-Padding
-      ↓
-Embedding Layer
-      ↓
-LSTM Layer
-      ↓
-Dense Layer
-      ↓
-Prediction Output
-```
-
----
-
-## 📦 Required Libraries
-
-Install dependencies using:
+## ⚙️ Run Locally
 
 ```bash
-pip install -r requirements.txt
-```
-
-### requirements.txt
-
-```txt
-streamlit
-tensorflow-cpu==2.15.0
-numpy
-pandas
-scikit-learn
-nltk
-textblob
-langdetect
-protobuf==4.25.3
-seaborn
-matplotlib
-```
-
----
-
-## ▶️ Run the Project Locally
-
-### Clone Repository
-
-```bash
+# 1. Clone
 git clone https://github.com/Kaweri05/sarcasm-detection.git
-```
-
-### Go to Project Folder
-
-```bash
 cd sarcasm-detection
-```
 
-### Install Requirements
-
-```bash
+# 2. Install dependencies
 pip install -r requirements.txt
-```
 
-### Run Streamlit App
+# 3. Create backend folder
+mkdir -p backend
+echo '{"accuracy": 78.34}' > backend/model_metrics.json
+echo '[]' > backend/analysis_history.json
 
-```bash
-python -m streamlit run app.py
+# 4. Run
+python server.py
+
+# 5. Open browser
+# http://localhost:5000
 ```
 
 ---
 
-## 📸 Sample Output
-![Output](output.png)
+## 🌐 Deployment
 
-### Input:
-
-```text
-Waah! kya problem hai
-```
-
-### Output:
-
-```text
-🌍 Language: Hindi
-🙂 Sentiment: Negative
-🤖 Prediction: Sarcastic
-📊 Confidence: 85%
-```
+| Platform | Status | URL |
+|---|---|---|
+| Hugging Face Spaces | ✅ Live | [huggingface.co/spaces/Kaweri05/sentify](https://huggingface.co/spaces/Kaweri05/sentify) |
+| GitHub | ✅ Source | [github.com/Kaweri05/sarcasm-detection](https://github.com/Kaweri05/sarcasm-detection) |
+| Kaggle | ✅ Notebook | [kaggle.com/Kaweri05](https://kaggle.com/Kaweri05) |
 
 ---
 
 ## 🌍 Supported Languages
 
-* English
-* Hindi
-* Marathi
-* Hinglish (Mixed Language)
-
----
-
-## 🎯 Real World Applications
-
-* Social Media Monitoring
-* Customer Review Analysis
-* Smart Chatbots
-* Brand Reputation Monitoring
-* Sentiment & Emotion Analysis
-* Mental Health Analysis
-
----
-
-## ⚠️ Challenges Faced
-
-* Multilingual sarcasm detection
-* Marathi language prediction issues
-* TensorFlow deployment compatibility
-* Streamlit deployment setup
+| Language | Detection | Translation | TTS |
+|---|---|---|---|
+| English | ✅ | ✅ | ✅ |
+| Hindi | ✅ | ✅ | ✅ |
+| Marathi | ✅ | ✅ | ✅ |
+| Spanish | — | ✅ | ✅ |
+| French | — | ✅ | ✅ |
+| Arabic | — | ✅ | ✅ |
+| Japanese | — | ✅ | ✅ |
+| + 15 more | — | ✅ | — |
 
 ---
 
 ## 🔮 Future Enhancements
 
-* Voice-based sarcasm detection
-* Meme sarcasm detection
-* Better Indian language support
-* BERT / IndicBERT integration
-* WhatsApp / Twitter integration
+- 🤖 BERT / IndicBERT for improved accuracy
+- 🎙️ Voice-based sarcasm detection
+- 😂 Meme sarcasm detection
+- 🐦 Twitter / WhatsApp integration
+- 📊 Batch CSV analysis
+- 🌏 Full Indic language NLP support
 
 ---
 
-## 📁 Project Structure
-
-```text
-sarcasm-detection/
-│── app.py
-│── copy_of_sarcasm_detection.py
-│── multilingual_sarcasm.py
-│── test.py
-│── Sarcasm.json
-│── requirements.txt
-│── runtime.txt
-│── README.md
-```
-
----
-
-## 👨‍💻 Author
+## 👩‍💻 Author
 
 **Kaweri Harinkhede**
-Computer Engineering Student
-Passionate about **AI, NLP, and Machine Learning**
+Computer Engineering Student · AI & NLP Enthusiast
 
-GitHub: https://github.com/Kaweri05
+[![GitHub](https://img.shields.io/badge/GitHub-Kaweri05-black?logo=github)](https://github.com/Kaweri05)
 
 ---
 
 ## ⭐ Conclusion
 
-This project improves machine understanding of human communication by detecting **hidden sarcasm**, **language**, and **sentiment** using **NLP and Deep Learning** in a multilingual environment.
+Sentify bridges the gap between traditional English-only sarcasm detection and real-world multilingual communication. By combining deep learning, NLP, real-time translation, and a mobile-first dashboard, it makes sarcasm detection accessible to everyone — in any language, on any device.
+
+> *"Because sometimes 'Oh great!' doesn't mean great at all."* 😏

@@ -1,0 +1,80 @@
+# ============================================================
+#   SENTIFY — Project Structure
+#   Multilingual Sarcasm Detection Dashboard
+# ============================================================
+
+sarcasm-detection/
+│
+├── 📄 server.py                  # Flask backend — main app entry point
+│                                 # Routes: /  /predict  /history
+│
+├── 📄 app.py                     # Legacy Streamlit version (not used in deployment)
+│
+├── 📄 copy_of_sarcasm_detection.py  # Original Kaggle notebook (training script)
+│
+├── 📄 multilingual_sarcasm.py    # Extended multilingual detection module
+│
+├── 📄 test.py                    # Unit tests for model and routes
+│
+├── 📄 requirements.txt           # Python dependencies
+├── 📄 runtime.txt                # Python version pin (3.10.13)
+├── 📄 Procfile                   # Gunicorn start command (Render/Railway)
+├── 📄 Dockerfile                 # Docker config (Hugging Face Spaces)
+├── 📄 vercel.json                # Vercel config (frontend only — limited)
+├── 📄 node.txt                   # Node.js clarification (not a Node project)
+├── 📄 structure.txt              # This file — project layout
+├── 📄 README.md                  # Full project documentation
+│
+├── 📄 sarcasm.json               # Dataset — Sarcasm Headlines (26,000+ entries)
+│                                 # Fields: headline, is_sarcastic, article_link
+│
+├── 📄 output.png                 # Sample prediction screenshot
+│
+├── 📁 templates/
+│   └── 📄 index.html             # Main dashboard UI (Jinja2 template)
+│                                 # Pages: Dashboard, Translator, Language Mix,
+│                                 #        Sentiment, History, Alerts, Model Info,
+│                                 #        Help, Privacy, Settings
+│
+├── 📁 static/
+│   └── 📄 style.css              # Mobile-first dashboard styles
+│                                 # Warm peach theme, bottom nav, responsive grid
+│
+├── 📁 backend/
+│   ├── 📄 model_metrics.json     # Stores model accuracy {"accuracy": 78.34}
+│   └── 📄 analysis_history.json  # Stores prediction history (array of records)
+│
+└── 📁 kaggle_deploy.ipynb        # Kaggle notebook for demo deployment via ngrok
+
+# ============================================================
+#   KEY DATA FLOW
+# ============================================================
+#
+#   User Input (text / voice)
+#       ↓
+#   templates/index.html  (frontend)
+#       ↓  POST /predict
+#   server.py             (Flask backend)
+#       ↓
+#   Language Detection    (word-list heuristic)
+#   Sentiment Analysis    (TextBlob)
+#   Sarcasm Prediction    (heuristic / LSTM model)
+#       ↓
+#   JSON Response → frontend renders result + chart
+#       ↓
+#   backend/analysis_history.json  (persisted log)
+#
+# ============================================================
+#   TECH STACK
+# ============================================================
+#
+#   Language      : Python 3.10
+#   Backend       : Flask 3.1.3
+#   ML Framework  : TensorFlow-CPU 2.15.0 / Keras
+#   Model         : LSTM (Long Short-Term Memory)
+#   NLP           : NLTK, TextBlob
+#   Translation   : MyMemory Free API (22+ languages)
+#   Frontend      : HTML5, CSS3, Vanilla JS, Plotly.js
+#   Speech I/O    : Web Speech API (browser-native)
+#   Deployment    : Hugging Face Spaces (Docker)
+#   Dataset       : Sarcasm Headlines Dataset (Kaggle)
